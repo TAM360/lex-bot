@@ -133,7 +133,7 @@ def index():
             'string': 'string'
         },
         requestAttributes={
-            'string': 'string'
+            'region_name':'us-east-1'
         },
         inputText='hi'
     ) 
