@@ -127,16 +127,18 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    # -------------------- for lex bot 'UniChatBot' -----------------------#
+
     # lex = boto3.client(
     #     'lex-runtime', 
     #     region_name='us-east-1', 
-    #     aws_access_key_id='AKIAIWW7FBGUJ5ZZHDYQ', 
-    #     aws_secret_access_key='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'
+    #     aws_access_key_id='AKIAJH52Z3SLPZAJ2ELQ', 
+    #     aws_secret_access_key='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'
     # )
 
     # response = lex.post_text(
-    #     botName='TestBot',
-    #     botAlias='aliasOne',
+    #     botName='UniChatBot',
+    #     botAlias='aliasTwo',
     #     userId='655701873205',
     #     sessionAttributes={
     #         'string': 'string'
@@ -144,10 +146,9 @@ def submit():
     #     requestAttributes={
     #         'string': 'string'
     #     },
-    #     inputText='hi'
+    #     inputText='do you know'
     # ) 
-    # return response['message']
-    # # print(response['message'])
+    # print(response)
     data = request.form['keyword']
     userID = request.form['userId']
 
