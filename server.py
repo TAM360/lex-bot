@@ -4,6 +4,7 @@ import json
 from pymongo import MongoClient
 import random
 from bson.objectid import ObjectId
+import boto3
 
 app = Flask(__name__)
 questions = ["Which subject are you interested it?","Do you like fishing?","Do you have a pet?", "What are your hobbies?"]
@@ -126,17 +127,16 @@ def index():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-     data = request.form['keyword']
-     userID = request.form['userId']
+    data = request.form['keyword']
+    userID = request.form['userId']
 
-     result = getAnswer(data, userID)
-     print (result )
-     resp = make_response(json.dumps(result))
-     resp.status_code = 200
-     resp.headers['Access-Control-Allow-Origin'] = '*'
-     return resp
+    result = getAnswer(data, userID)
+    print (result )
+    resp = make_response(json.dumps(result))
+    resp.status_code = 200
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 if __name__ == '__main__':
     db = mongoInstance()
-    # addUser('taimoor mirza', db)
     app.run(host='127.0.0.1', debug=True)
