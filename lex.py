@@ -38,6 +38,6 @@ response = lex.post_text(
     requestAttributes={
         'string': 'string'
     },
-    inputText='do you know'
+    inputText='can you tell'
 ) 
-print(response)
+print(response['message'])
