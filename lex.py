@@ -16,4 +16,4 @@ response = lex.post_text(
     inputText='hi'
 ) 
 
-print(response)
+print(response['message'])
