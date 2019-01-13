@@ -123,7 +123,23 @@ def getAnswer(data, userID): #here we will implement our logic for giving an int
 
 @app.route('/', methods=['GET'])
 def index():
-    return render_template('index.html')
+    lex = boto3.client('lex-runtime')
+
+    response = lex.post_text(
+        botName='TestBot',
+        botAlias='aliasOne',
+        userId='655701873205',
+        sessionAttributes={
+            'string': 'string'
+        },
+        requestAttributes={
+            'string': 'string'
+        },
+        inputText='hi'
+    ) 
+    return response['message']
+    # print(response['message'])
+    # return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():

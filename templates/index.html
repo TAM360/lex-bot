@@ -20,19 +20,18 @@
                     <div class="col-sm-6 col-sm-offset-3 col-xs-offset-0">
                         <div class="card no-border">
                             <div id="chat" class="conv-form-wrapper">
-                                <form action=".submit" method="POST" >
-                                    <select data-conv-question="Hi" name="question">
+                                <form action="submit" method="POST" id="form1">
+                                    <select id="dropDown" data-conv-question="Hi" name="question">
 										<option value="yes">Yes</option>
 										<option value="no">No!</option>
 									</select>
-                                    <input type="text" name="question" data-conv-question="Okay! Please, tell me your name first.">
+                                    <input type="text"  data-conv-question="Okay! Please, tell me your name first.">
                                 </form>
                             </div>
-                           <!-- <div id="endText" class="">
-                                <span> Thanks for your time</span>
-                            </div> -->
-                        </div>
-
+                           <div id="endText" style="display:none; z-axis: 1;">
+                                <span style="text-align: center"> Thanks for your time</span>
+                            </div> 
+                        </div> 
                     </div>
                 </div>
             </div>
@@ -41,7 +40,13 @@
     <script type="text/javascript" src="{{url_for('static', filename='jquery-1.12.3.min.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='dautosize.min.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='jquery.convform.js')}}"></script>
-
+    <script> 
+        $(document).ready(function(e) {
+            $('#form1').on('submit', function() {
+                alert( $('question').text );    
+            });
+        }); 
+    </script>
     <script>
         function google() {
             window.open("https://google.com");
