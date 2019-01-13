@@ -123,31 +123,31 @@ def getAnswer(data, userID): #here we will implement our logic for giving an int
 
 @app.route('/', methods=['GET'])
 def index():
-    lex = boto3.client(
-        'lex-runtime', 
-        region_name='us-east-1', 
-        aws_access_key_id='AKIAIWW7FBGUJ5ZZHDYQ', 
-        aws_secret_access_key='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'
-    )
-
-    response = lex.post_text(
-        botName='TestBot',
-        botAlias='aliasOne',
-        userId='655701873205',
-        sessionAttributes={
-            'string': 'string'
-        },
-        requestAttributes={
-            'string': 'string'
-        },
-        inputText='hi'
-    ) 
-    return response['message']
-    # print(response['message'])
-    # return render_template('index.html')
+    return render_template('index.html')
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    # lex = boto3.client(
+    #     'lex-runtime', 
+    #     region_name='us-east-1', 
+    #     aws_access_key_id='AKIAIWW7FBGUJ5ZZHDYQ', 
+    #     aws_secret_access_key='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'
+    # )
+
+    # response = lex.post_text(
+    #     botName='TestBot',
+    #     botAlias='aliasOne',
+    #     userId='655701873205',
+    #     sessionAttributes={
+    #         'string': 'string'
+    #     },
+    #     requestAttributes={
+    #         'string': 'string'
+    #     },
+    #     inputText='hi'
+    # ) 
+    # return response['message']
+    # # print(response['message'])
     data = request.form['keyword']
     userID = request.form['userId']
 
