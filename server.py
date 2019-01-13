@@ -123,7 +123,7 @@ def getAnswer(data, userID): #here we will implement our logic for giving an int
 
 @app.route('/', methods=['GET'])
 def index():
-    lex = boto3.client('lex-runtime')
+    lex = boto3.client('lex-runtime', region_name='us-east-1')
 
     response = lex.post_text(
         botName='TestBot',
@@ -133,7 +133,7 @@ def index():
             'string': 'string'
         },
         requestAttributes={
-            'region_name':'us-east-1'
+            'string': 'string'
         },
         inputText='hi'
     ) 
