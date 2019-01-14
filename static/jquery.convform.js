@@ -1,3 +1,4 @@
+
 function SingleConvState(input){
 
     this.input = input;
@@ -25,7 +26,7 @@ ConvState.prototype.newState = function(options) {
         name: '',
         noAnswer: false,
         required: true,
-        questions: ['You forgot the question!'],
+        questions: [""],
         type: 'text',
         multiple: false,
         selected: "",
@@ -65,12 +66,11 @@ ConvState.prototype.next = function(){
 };
 ConvState.prototype.printQuestion = function(){
     var questions = this.current.input.questions;
-    var question = questions; 
+    var question = questions;
     if(this.answers['question']){
         var jsonData = {};
         jsonData["keyword"] = this.answers['question'].text;
-        jsonData["userId"] = document.getElementById("UserID").innerText;
-        var qurl="http://127.0.0.1:5000/";
+        var qurl= window.location.href + "/submit";
         $.ajax({
             type: "POST",
             cache: false,
@@ -79,11 +79,11 @@ ConvState.prototype.printQuestion = function(){
             dataType: "json",
             async: false,
             success: function(data) { 
-                var obj = jQuery.parseJSON( data );
-                $("#UserID").text( obj.userid);
-                question = obj.result;
-                console.log("obj uid" +  obj.userid) ;
-                console.log("question" +  question) ;
+                // var obj =  data;
+                // $("#UserID").text( obj.userid);
+                question = data;
+                // console.log("obj uid" +  obj.userid);
+                console.log("answer: " +  question) ;
             },
             error: function(jqXHR) {
                 alert("error: " + jqXHR.status);
@@ -399,6 +399,7 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
                             });
                             if (results.length) {
                                 state.current.input.selected = results[0];
+
                                 $(this).parent('form').submit();
                             } else {
                                 state.wrapper.find(parameters.inputIdHashTagName).addClass('error');
@@ -512,6 +513,11 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
             $(inputForm).submit(function(e){
                 e.preventDefault();
                 var answer =  $(this).find(parameters.inputIdHashTagName).val();
+                if(answer.toLowerCase() == "no" || answer == "no!"){
+                    $('.chat-form').addClass('d-none');
+                    $('#endText').removeClass('d-none');
+                    return;
+                }
                 $(this).find(parameters.inputIdHashTagName).val("");
                 if(state.current.input.type == 'select'){
                     if(!state.current.input.multiple){

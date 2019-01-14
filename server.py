@@ -1,5 +1,5 @@
 import printjson as printjson
-from flask import Flask, request, make_response, render_template
+from flask import Flask, request, make_response, render_template, jsonify
 import json
 from pymongo import MongoClient
 import random
@@ -7,6 +7,7 @@ from bson.objectid import ObjectId
 import boto3
 
 app = Flask(__name__)
+app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
 questions = ["Which subject are you interested it?","Do you like fishing?","Do you have a pet?", "What are your hobbies?"]
 
 class JSONEncoder(json.JSONEncoder):
@@ -128,37 +129,39 @@ def index():
 @app.route('/submit', methods=['POST'])
 def submit():
     # -------------------- for lex bot 'UniChatBot' -----------------------#
+    print(request.form)
+    
+    lex = boto3.client(
+        'lex-runtime', 
+        region_name='us-east-1', 
+        aws_access_key_id='AKIAJH52Z3SLPZAJ2ELQ', 
+        aws_secret_access_key='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'
+    )
 
-    # lex = boto3.client(
-    #     'lex-runtime', 
-    #     region_name='us-east-1', 
-    #     aws_access_key_id='AKIAJH52Z3SLPZAJ2ELQ', 
-    #     aws_secret_access_key='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'
-    # )
+    response = lex.post_text (
+        botName='UniChatBot',
+        botAlias='aliasTwo',
+        userId='655701873205',
+        sessionAttributes={
+            'string': 'string'
+        },
+        requestAttributes={
+            'string': 'string'
+        },
+        inputText= request.form['keyword']
+    ) 
+    print('response', type(response), response['message'])
+    # data = request.form['keyword']
+    # userID = request.form['userId']
 
-    # response = lex.post_text(
-    #     botName='UniChatBot',
-    #     botAlias='aliasTwo',
-    #     userId='655701873205',
-    #     sessionAttributes={
-    #         'string': 'string'
-    #     },
-    #     requestAttributes={
-    #         'string': 'string'
-    #     },
-    #     inputText='do you know'
-    # ) 
-    # print(response)
-    data = request.form['keyword']
-    userID = request.form['userId']
-
-    result = getAnswer(data, userID)
-    print (result )
-    resp = make_response(json.dumps(result))
+    # result = getAnswer(data, userID)
+    # print (result )
+    resp = make_response(json.dumps(response['message']))
+    print ('resp', resp)
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'
     return resp
 
 if __name__ == '__main__':
     db = mongoInstance()
-    app.run(host='127.0.0.1', debug=True)
+    app.run(host='127.0.0.1', port=8000, debug=True)

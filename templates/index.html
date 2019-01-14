@@ -9,37 +9,39 @@
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='jquery.convform.css')}}">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='demo.css')}}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script type="text/javascript" src="{{url_for('static', filename='jquery-1.12.3.min.js')}}"></script> -->
+    <script type="text/javascript" src="{{url_for('static', filename='autosize.min.js')}}"></script>
+    <script type="text/javascript" src="{{url_for('static', filename='jquery.convform.js')}}"></script>
 </head>
 
 <body>
-    <!-- <span id="UserID" style="">-1</span> -->
-    <section id="demo">
-        <div class="vertical-align">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-6 col-sm-offset-3 col-xs-offset-0">
-                        <div class="card no-border">
-                            <div id="chat" class="conv-form-wrapper">
-                                <form action="submit" method="POST" id="form1">
-                                    <select id="dropDown" data-conv-question="Hi" name="question">
-										<option value="yes">Yes</option>
-										<option value="no">No!</option>
-									</select>
-                                    <input type="text"  data-conv-question="Okay! Please, tell me your name first.">
-                                </form>
-                            </div>
-                           <div id="endText" style="display:none; z-axis: 1;">
-                                <span style="text-align: center"> Thanks for your time</span>
-                            </div> 
-                        </div> 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-    <script type="text/javascript" src="{{url_for('static', filename='jquery-1.12.3.min.js')}}"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='dautosize.min.js')}}"></script>
-    <script type="text/javascript" src="{{url_for('static', filename='jquery.convform.js')}}"></script>
+    <span id="UserID" style="display:none">-1</span> 
+   <section id="demo">
+	    <div class="vertical-align">
+	        <div class="container">
+	            <div class="row">
+	                <div class="chat-form col-sm-6 col-sm-offset-3 col-xs-offset-0">
+	                    <div class="card no-border">
+	                        <div id="chat" class="conv-form-wrapper ">
+	                            <form action="" method="GET" class="hidden">
+	                                <input type="text" name="question" data-conv-question="Okay! Please, tell me your name first.">
+	                                <!--<input type="text" name="question" data-conv-question="Okay! Please, tell me your name first.">-->
+	                            </form>
+							</div>
+						</div>
+	                </div>
+					<div id="endText" class="col-sm-6 col-sm-offset-3 col-xs-offset-0 d-none">
+						<div class="card no-border">
+							<div style=" width: calc(100% - 33px);margin: 100px auto 100px; padding: 0 !important;position: relative;text-align: center;font-size: 50px;color: gray;">
+		                            <span> Thanks for your time!</span>
+							</div>
+						</div>
+					</div>
+	            </div>
+	        </div>
+	    </div>
+	</section>
     <script> 
         $(document).ready(function(e) {
             $('#form1').on('submit', function() {
