@@ -23,14 +23,14 @@ function ConvState(wrapper, SingleConvState, form, params) {
 ConvState.prototype.newState = function(options) {
 
     var input = $.extend(true, {}, {
-        name: '',
+        name: 'question',
         noAnswer: false,
         required: true,
         questions: [""],
         type: 'text',
         multiple: false,
         selected: "",
-        answers: []
+        answers: [""]
     }, options);
     input.element = $('<input type="text" name="'+input.name+'"/>');
     return new SingleConvState(input);
