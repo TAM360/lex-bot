@@ -81,7 +81,7 @@ ConvState.prototype.printQuestion = function(){
             success: function(data) { 
                 // var obj =  data;
                 // $("#UserID").text( obj.userid);
-                question = data;
+                question = data.replace('\n', '').replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\d+]/gi, '');
                 // console.log("obj uid" +  obj.userid);
                 console.log("answer: " +  question) ;
             },
