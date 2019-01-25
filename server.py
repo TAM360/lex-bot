@@ -5,6 +5,7 @@ from pymongo import MongoClient
 import random
 from bson.objectid import ObjectId
 import boto3
+from nlp import binary_module, compare
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -129,34 +130,39 @@ def index():
 @app.route('/submit', methods=['POST'])
 def submit():
     # -------------------- for lex bot 'UniChatBot' -----------------------#
-    print(request.form)
+    # print(request.form)
+    resp = None
+    kwd = request.form['keyword']
     
-    lex = boto3.client(
-        'lex-runtime', 
-        region_name='us-east-1', 
-        aws_access_key_id='AKIAJH52Z3SLPZAJ2ELQ', 
-        aws_secret_access_key='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'
-    )
+    if len(compare(kwd)) > 0: 
+        result = binary_module(kwd)[0]
+        print('result', result, type(result))
+        resp = make_response(json.dumps(result))
 
-    response = lex.post_text (
-        botName='UniChatBot',
-        botAlias='aliasTwo',
-        userId='655701873205',
-        sessionAttributes={
-            'string': 'string'
-        },
-        requestAttributes={
-            'string': 'string'
-        },
-        inputText= request.form['keyword']
-    ) 
-    print('response', type(response), response['message'])
-    # data = request.form['keyword']
-    # userID = request.form['userId']
+    else:
+        lex = boto3.client(
+            'lex-runtime', 
+            region_name='us-east-1', 
+            aws_access_key_id='AKIAJH52Z3SLPZAJ2ELQ', 
+            aws_secret_access_key='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'
+        )
 
-    # result = getAnswer(data, userID)
-    # print (result )
-    resp = make_response(json.dumps(response['message']))
+        response = lex.post_text (
+            botName='UniChatBot',
+            botAlias='aliasTwo',
+            userId='655701873205',
+            sessionAttributes={
+                'string': 'string'
+            },
+            requestAttributes={
+                'string': 'string'
+            },
+            inputText= request.form['keyword']
+        )
+
+        print('response', type(response), response['message'])
+        resp = make_response(json.dumps(response['message']))
+    
     print ('resp', resp)
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'
