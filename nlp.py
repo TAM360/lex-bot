@@ -60,13 +60,14 @@ def one_compliment(x):
     else:
         return ["Error! 1 argumnent required, given 0."]
 
-# def twos_compliment(binary_numbers):
-#     if len(binary_numbers) == 1:
-#         compliment = one_compliment(binary_numbers) 
-#         return bin(int(compliment, base = 2) + 1).replace('0b', '')
+def twos_compliment(binary_numbers):
+    if len(binary_numbers) == 1:
+        steps = ''
+        compliment = one_compliment(binary_numbers) 
+        return [bin(int(compliment[0], base = 2) + 1).replace('0b', ''), steps]
     
-#     else:
-#         return json.dumps({'error':"Error! 1 argumnent required, given 0."})
+    else:
+        return ["Error! 1 argumnent required, given 0."]
 
 def bit_representation(decimal_numbers):
     
@@ -124,6 +125,9 @@ def binary_module(query):
         if 'one' in kwd and 'compliment' in kwd:
             return one_compliment(binar_numbers)
     
+        elif 'two' in kwd and 'compliment' in kwd: 
+            return twos_compliment(binar_numbers)
+
         elif 'required' in kwd and 'bits' in kwd: 
             return bit_representation(decimal_numbers)
 
