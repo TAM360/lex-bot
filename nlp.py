@@ -1,6 +1,6 @@
 import nltk
 import re, math, json
-# nltk.download('punkt')
+nltk.download('punkt')
 
 def compare(query):
     keyword_list = [
