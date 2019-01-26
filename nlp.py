@@ -148,15 +148,15 @@ def binary_module(query):
 
     except:
 
-        raise Exception
-        # return ["Sorry, I couldn't understand your question. Please repeat it again."]
+        # raise Exception
+        return ["Sorry, I couldn't understand your question. Please repeat it again."]
 
 
-# if __name__ == "__main__":
-    # print(binary_module("what's the one's compliment of 1010?"))
-    # print(binary_module("how many bits are required to represent 37 in binary"))
-    # print(binary_module("what's the sum of 10101 and 11"))
-    # print(binary_module("11010 - 001"))
-    # print(binary_module("convert 10101 to decimal"))
-    # print(binary_module("convert 24 from decimal to binary"))
-    # print(twos_compliment(['1101011']))
+
+# print(binary_module("what's the one's compliment of 1010?"))
+# print(binary_module("how many bits are required to represent 37 in binary"))
+# print(binary_module("what's the sum of 10101 and 11"))
+# print(binary_module("11010 - 001"))
+# print(binary_module("convert 10101 to decimal"))
+# print(binary_module("convert 24 from decimal to binary"))
+# print(twos_compliment(['1101011']))
