@@ -31,8 +31,18 @@ def check_binary_format(string) :
 
 def binary_to_decimal(binary_numbers):
     if len(binary_numbers) == 1:
-        steps = ''
-        return [int(binary_numbers[0], base = 2), steps]
+        steps = 'Starting from LSB, take sum of (2*i)^x where i = bit value and x = bit position.'
+        steps = steps + ' For this example, ' + binary_numbers[0] + ' = '
+        sum = 0
+        position = len(binary_numbers[0]) - 1
+
+        for i in range(0, len(binary_numbers[0]) - 1):
+            sum = sum + (2 * int(binary_numbers[0][i], base = 2) ** position)
+            position = position - 1
+            steps = steps + '2*' + binary_numbers[0][i] + '^' + str(position) + ' + '
+        
+        steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
+        return [int(binary_numbers[0], base = 2), steps[:len(steps) - 3]]
     
     else: 
         return ['Error! 1 argument required, given 0 or more than 1']
@@ -40,7 +50,17 @@ def binary_to_decimal(binary_numbers):
 
 def decimal_to_binary(decimal_numbers):
     if len(decimal_numbers) == 1:
-        steps = ''
+        steps = 'To convert decimal number into binary, divide the number by 2 repeatedly until '
+        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.' 
+        steps = steps + ' For this example, '
+
+        num = decimal_numbers[0]
+        count = 1
+        while (count <= math.ceil(math.log(int(num), 2))):
+            steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+            steps = steps + ', carry = ' + str(int(2* num%2)) + ' '
+            count = count + 1
+            
         return [bin(decimal_numbers[0]).replace("0b", ""), steps]
     
     else: 
@@ -55,14 +75,14 @@ def one_compliment(x):
             else: 
                 temp = temp + '0'
         print(temp)
-        return [temp, "invert every bit of the given bit string"] 
+        return [temp, "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"] 
 
     else:
         return ["Error! 1 argumnent required, given 0."]
 
 def twos_compliment(binary_numbers):
     if len(binary_numbers) == 1:
-        steps = ''
+        steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)"
         compliment = one_compliment(binary_numbers) 
         return [bin(int(compliment[0], base = 2) + 1).replace('0b', ''), steps]
     
@@ -158,5 +178,5 @@ def binary_module(query):
 # print(binary_module("what's the sum of 10101 and 11"))
 # print(binary_module("11010 - 001"))
 # print(binary_module("convert 10101 to decimal"))
-# print(binary_module("convert 24 from decimal to binary"))
+print(binary_module("convert 24 from decimal to binary"))
 # print(twos_compliment(['1101011']))
