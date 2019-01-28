@@ -148,7 +148,7 @@ def binary_module(query):
         elif ('two' in kwd or 'twos' in kwd or "two's" in kwd) and ('compliment' in kwd or 'complement' in kwd):
             return twos_compliment(binar_numbers)
 
-        elif 'required' in kwd and 'bits' in kwd: 
+        elif 'bits' in kwd: 
             return bit_representation(decimal_numbers)
 
         elif 'sum' in kwd or '+' in kwd:
