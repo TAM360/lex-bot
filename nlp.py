@@ -42,7 +42,7 @@ def binary_to_decimal(binary_numbers):
             steps = steps + '2*' + binary_numbers[0][i] + '^' + str(position) + ' + '
         
         steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
-        return [int(binary_numbers[0], base = 2), steps[:len(steps) - 3]]
+        return [str(int(binary_numbers[0], base = 2)), steps[:len(steps) - 3]]
     
     else: 
         return ['Error! 1 argument required, given 0 or more than 1', ""]
@@ -61,7 +61,7 @@ def decimal_to_binary(decimal_numbers):
             steps = steps + ', carry = ' + str(int(2* num%2)) + ' '
             count = count + 1
             
-        return [bin(decimal_numbers[0]).replace("0b", ""), steps]
+        return [str(bin(decimal_numbers[0]).replace("0b", "")), steps]
     
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
@@ -84,7 +84,7 @@ def twos_compliment(binary_numbers):
     if len(binary_numbers) == 1:
         steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)"
         compliment = one_compliment(binary_numbers) 
-        return [bin(int(compliment[0], base = 2) + 1).replace('0b', ''), steps + compliment[1]]
+        return [str(bin(int(compliment[0], base = 2) + 1).replace('0b', '')), steps + compliment[1]]
     
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -94,7 +94,7 @@ def bit_representation(decimal_numbers):
     if len(decimal_numbers) == 1:    
         steps = "steps: 1. take log base 2 of the given binary string i.e log(" + str(decimal_numbers[0]) +", base = 2) = " + str(math.log(decimal_numbers[0], 2)) 
         steps = steps + "2. take ceiling of the previous result like this: ceiling(" + str(math.log(decimal_numbers[0], 2)) + ") = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
-        return [math.ceil(math.log(decimal_numbers[0], 2)), steps]
+        return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
         return ['Error! 1 arg required, given 0', ""]
@@ -108,7 +108,7 @@ def binary_addition(binary_numbers):
 
 def binary_subtraction(binary_numbers):
     if len(binary_numbers) == 2:
-        return [bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", ''), '']
+        return [str(bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')), '']
 
     else:
         return ["Error! 2 args required, given 1.", ""]
