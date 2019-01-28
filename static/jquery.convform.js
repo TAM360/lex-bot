@@ -79,12 +79,18 @@ ConvState.prototype.printQuestion = function(){
             dataType: "json",
             async: false,
             success: function(data) { 
+                console.log(data);
                 // var obj =  data;
                 // $("#UserID").text( obj.userid);
                 // question = data.replace('\n', '').replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\d+]/, '');
-                question = data
+
+                //response = JSON.parse(data);
+                //console.log("response" + response)
+                question = data.result;
+                steps = data.steps;
                 // console.log("obj uid" +  obj.userid);
-                console.log("answer: " +  question) ;
+                //console.log("answer: " +  question + " steps " + question) ;
+                window.Steps = steps;
             },
             error: function(jqXHR) {
                 alert("error: " + jqXHR.status);
@@ -105,9 +111,12 @@ ConvState.prototype.printQuestion = function(){
             if(this.next()){
                 setTimeout(function(){
                     var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
+
                     $(this.wrapper).find('#messages').append(messageObj);
                     this.scrollDown();
                     this.printQuestion();
+                    //console.log("2");
+
                 }.bind(this),200);
             } else {
                 this.parameters.eventList.onSubmitForm(this);
@@ -214,9 +223,13 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
 
     this.parameters.eventList.onInputSubmit(this, function(){
         //goes to next state and prints question
+        //console.log("5")
         if(this.next()){
             setTimeout(function(){
                 this.printQuestion();
+                //console.log("3 " + window.Steps);
+                
+
             }.bind(this), 300);
         } else {
             this.parameters.eventList.onSubmitForm(this);
@@ -239,7 +252,7 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
                     convState.form.submit();
                     return true;
                 },
-                onInputSubmit : function(convState, readyCallback) {readyCallback()}
+                onInputSubmit : function(convState, readyCallback) {readyCallback(); console.log("4")}
             },
             formIdName : 'convForm',
             inputIdName : 'userInput',
@@ -380,9 +393,12 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
             setTimeout(function() {
                 $.when($('div.spinLoader').addClass('hidden')).done(function() {
                     var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
+
                     $(state.wrapper).find('#messages').append(messageObj);
                     state.scrollDown();
                     state.printQuestion();
+                    //console.log("1");
+
                 });
             }, parameters.timeOutFirstQuestion);
 

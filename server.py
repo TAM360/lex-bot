@@ -40,10 +40,22 @@ def submit():
     kwd = request.form['keyword']
     
     if len(compare(kwd)) > 0: 
-        result = binary_module(kwd)[0]
-        print('result', result, type(result))
-        resp = make_response(json.dumps(result))
-        print(addDataToMongo(kwd, result, db))
+        result = binary_module(kwd)
+        print (type(result))
+        print('result', result[0], type(result))
+
+        result1 = ""
+        response = ""
+        if(len(result) > 1):
+            result1 = result[1]
+            response = '{"result" : "' + result[0] +'", "steps" : "' + result1 + '"}'
+        else:
+            response = '{"result" : "' + result[0] + '"}'
+
+        print('result1', result1, type(result1))
+        print('response', response, type(response))
+        resp = make_response(response)
+        print(addDataToMongo(kwd, result[0], db))
 
     else:
         lex = boto3.client(
@@ -66,7 +78,8 @@ def submit():
             inputText= request.form['keyword']
         )
         print('response', type(response), response['message'])
-        resp = make_response(json.dumps(response['message']))
+        response = '{"result" : "' + response['message'] + '"}'
+        resp = make_response(response)
         print(addDataToMongo(kwd, response['message'], db))
     
     print ('resp', resp)

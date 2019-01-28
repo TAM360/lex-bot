@@ -4,8 +4,8 @@ nltk.download('punkt')
 
 def compare(query):
     keyword_list = [
-        'one', 'two', 'compliment', 
-        'convert', 'compliment', 'represent' 
+        'one', 'two','ones', 'twos', "one's", "two's", 'compliment', 
+        'convert', 'complement', 'represent' 
         'number', 'any', 'bits',
         'binary', 'decimal', '+', '-', 
         'sum', 'difference', 'required'
@@ -45,7 +45,7 @@ def binary_to_decimal(binary_numbers):
         return [int(binary_numbers[0], base = 2), steps[:len(steps) - 3]]
     
     else: 
-        return ['Error! 1 argument required, given 0 or more than 1']
+        return ['Error! 1 argument required, given 0 or more than 1', ""]
 
 
 def decimal_to_binary(decimal_numbers):
@@ -64,7 +64,7 @@ def decimal_to_binary(decimal_numbers):
         return [bin(decimal_numbers[0]).replace("0b", ""), steps]
     
     else: 
-        return ["Error! 1 argument required, given 0 or more than 1"]
+        return ["Error! 1 argument required, given 0 or more than 1", ""]
 
 def one_compliment(x):
     if len(x) == 1:
@@ -78,16 +78,16 @@ def one_compliment(x):
         return [temp, "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"] 
 
     else:
-        return ["Error! 1 argumnent required, given 0."]
+        return ["Error! 1 argumnent required, given 0.", ""]
 
 def twos_compliment(binary_numbers):
     if len(binary_numbers) == 1:
         steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)"
         compliment = one_compliment(binary_numbers) 
-        return [bin(int(compliment[0], base = 2) + 1).replace('0b', ''), steps]
+        return [bin(int(compliment[0], base = 2) + 1).replace('0b', ''), steps + compliment[1]]
     
     else:
-        return ["Error! 1 argumnent required, given 0."]
+        return ["Error! 1 argumnent required, given 0.", ""]
 
 def bit_representation(decimal_numbers):
     
@@ -97,25 +97,25 @@ def bit_representation(decimal_numbers):
         return [math.ceil(math.log(decimal_numbers[0], 2)), steps]
     
     else: 
-        return ['Error! 1 arg required, given 0']
+        return ['Error! 1 arg required, given 0', ""]
 
 def binary_addition(binary_numbers):
     if len(binary_numbers) == 2:
         return [bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", ''), '']
         
     else:
-        return ["Error! 2 args required, given 1."]
+        return ["Error! 2 args required, given 1.", ""]
 
 def binary_subtraction(binary_numbers):
     if len(binary_numbers) == 2:
         return [bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", ''), '']
 
     else:
-        return ["Error! 2 args required, given 1."]
+        return ["Error! 2 args required, given 1.", ""]
 
 def binary_module(query):
     keyword_list = [
-        'one', 'two', 'compliment', 
+        'one', 'two', 'complement', 
         'convert', 'compliment', 'represent' 
         'number', 'any', 'bits',
         'binary', 'decimal', '+', '-', 
@@ -142,10 +142,10 @@ def binary_module(query):
     # print(binar_numbers, decimal_numbers)
 
     try:
-        if 'one' in kwd and 'compliment' in kwd:
+        if (('one' in kwd or 'ones' in kwd or "one's" in kwd) or ('two' not in kwd and 'twos' not in kwd and "two's" not in kwd)) and ('compliment' in kwd or 'complement' in kwd):
             return one_compliment(binar_numbers)
     
-        elif 'two' in kwd and 'compliment' in kwd: 
+        elif ('two' in kwd or 'twos' in kwd or "two's" in kwd) and ('compliment' in kwd or 'complement' in kwd):
             return twos_compliment(binar_numbers)
 
         elif 'required' in kwd and 'bits' in kwd: 
@@ -164,7 +164,7 @@ def binary_module(query):
             elif "to binary" in query or "decimal to binary" in query:
                 return decimal_to_binary(decimal_numbers)
         else:
-            return ["query format not correct, please repeat the question againg"]
+            return ["query format not correct, please repeat the question again.", ""]
 
     except:
 
