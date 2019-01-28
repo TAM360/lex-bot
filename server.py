@@ -37,7 +37,7 @@ def index():
 def submit():
     db = mongoInstance()    
     resp = None
-    kwd = request.form['keyword']
+    kwd = request.form['keyword'].lower()
     
     if len(compare(kwd)) > 0: 
         result = binary_module(kwd)
