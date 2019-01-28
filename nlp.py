@@ -6,7 +6,7 @@ def compare(query):
     keyword_list = [
         'one', 'two','ones', 'twos', "one's", "two's", 'compliment', 
         'convert', 'complement', 'represent' 
-        'number', 'any', 'bits',
+        'number', 'bits',
         'binary', 'decimal', '+', '-', 
         'sum', 'difference', 'required'
     ]
