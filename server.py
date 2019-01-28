@@ -78,8 +78,8 @@ def submit():
             inputText= request.form['keyword']
         )
         print('response', type(response), response['message'])
-        response = '{"result" : "' + response['message'] + '"}'
-        resp = make_response(response)
+        result = '{"result" : "' + response['message'] + '"}'
+        resp = make_response(result)
         print(addDataToMongo(kwd, response['message'], db))
     
     print ('resp', resp)
