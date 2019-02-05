@@ -57,6 +57,27 @@ def submit():
         resp = make_response(response)
         print(addDataToMongo(kwd, result[0], db))
 
+    elif kwd == 'help':
+        guide = "Hi! My name is Serina. I will be your guide. This is a Lex-Bot,<br />" \
+                "a chat bot that will assist you in academics. It has 2 modules:<br /><br />"\
+                "<b>Binary Module</b>: Submit any mathematical queries related with <br />"\
+                "binary numbers and it will provide step by step solution. It <br/>"\
+                "can solve 1's compliment, 2's compliment, base converion <br/>"\
+                "(binary to decimal/decimal to binary), addition and subtraction. <br/>"\
+                "Following are the sample questions. You can follow any of these <br/>"\
+                "formats to get the results <br/>"\
+                "<b>1. what's the one's compliment of 1010? <br/>"\
+                "2. how many bits are required to represent 37 in binary <br/>"\
+                "3. what's the sum of 10101 and 11 <br/>"\
+                "4. 11010 - 001 <br/>"\
+                "5. convert 10101 to decimal <br/>"\
+                "6. convert 24 from decimal to binary <br/></b><br />"\
+                "<b>University Module:</b>This module can answer questions about<br />"\
+                "program details, available courses etc <br />"
+        print(guide)
+        result = '{"result" : "' + guide + '"}'
+        resp = make_response(result)
+
     else:
         lex = boto3.client(
             'lex-runtime', 
