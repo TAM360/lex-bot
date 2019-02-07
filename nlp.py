@@ -120,7 +120,12 @@ def bit_representation(decimal_numbers):
 
 def binary_addition(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 2:
-        return [bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", ''), '']
+        return [bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", ''), 
+                'Starting from LSB (assumming both arguments to be in base 2), add the bits of each'\
+                'argument.<br/ >if the sum is equal to 10 (2 in decimal), then add the carry in next<br />'\
+                'bit of 1st argument and place 0 in the final answer.<br />If the sum of bits from both'\
+                'arguments is 11 (3 in decimal) then place 1 in the final result and add 1 in the next bit of<br />'\
+                'the first argument. Keep repeating these steps untill MSB is reached.<br />']
 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
         return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
@@ -130,7 +135,10 @@ def binary_addition(binary_numbers, decimal_numbers = None):
 
 def binary_subtraction(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 2:
-        return [str(bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')), '']
+        return [str(bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')), 
+        'Binary subtraction is also similar to that of decimal subtraction with the difference that when'\
+        "1 is subtracted from 0, it is necessary to borrow 1 from the next higher order bit"\
+        'and that bit is reduced by 1 (or 1 is added to the next bit of subtrahend) and the remainder is 1']
 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
         return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
