@@ -2,19 +2,19 @@ import nltk
 import re, math, json
 nltk.download('punkt')
 
+keyword_list = [
+    'write', 'one', 'two','ones', 'twos', 
+    "one's", "two's", 'compliment', 
+    'convert', 'complement', 'represent' 
+    'number', 'bits',
+    'binary', 'decimal', '+', '-', 
+    'sum', 'difference', 'required'
+]
+
+# retrieve common keywords.
 def compare(query):
-    keyword_list = [
-        'one', 'two','ones', 'twos', "one's", "two's", 'compliment', 
-        'convert', 'complement', 'represent' 
-        'number', 'bits',
-        'binary', 'decimal', '+', '-', 
-        'sum', 'difference', 'required'
-    ]
-
     tokenize = nltk.word_tokenize(query)
-    # print(tokenize)
-
-    return [x for x in tokenize if x in keyword_list] # get common keywords
+    return [x for x in tokenize if x in keyword_list]
 
 def check_binary_format(string) : 
     
@@ -31,8 +31,8 @@ def check_binary_format(string) :
 
 def binary_to_decimal(binary_numbers):
     if len(binary_numbers) == 1:
-        steps = 'Starting from LSB, take sum of (2*i)^x where i = bit value and x = bit position.'
-        steps = steps + ' For this example, ' + binary_numbers[0] + ' = '
+        steps = 'Starting from LSB, take sum of (2*i)^x where i = bit value and x = bit position.<br />'
+        steps = steps + ' For this example, <br /><b>' + binary_numbers[0] + ' = '
         sum = 0
         position = len(binary_numbers[0]) - 1
 
@@ -42,6 +42,7 @@ def binary_to_decimal(binary_numbers):
             steps = steps + '2*' + binary_numbers[0][i] + '^' + str(position) + ' + '
         
         steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
+        steps = steps + '</b><br />'
         return [str(int(binary_numbers[0], base = 2)), steps[:len(steps) - 3]]
     
     else: 
@@ -50,17 +51,18 @@ def binary_to_decimal(binary_numbers):
 
 def decimal_to_binary(decimal_numbers):
     if len(decimal_numbers) == 1:
-        steps = 'To convert decimal number into binary, divide the number by 2 repeatedly until '
-        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.' 
-        steps = steps + ' For this example, '
+        steps = 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
+        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
+        steps = steps + ' For this example, <br /> <b>'
 
         num = decimal_numbers[0]
         count = 1
         while (count <= math.ceil(math.log(int(num), 2))):
             steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
-            steps = steps + ', carry = ' + str(int(2* num%2)) + ' '
+            steps = steps + ', carry = ' + str(int(2* num%2)) + '<br />'
             count = count + 1
-            
+        
+        steps = steps + "<b/> <br/>"
         return [str(bin(decimal_numbers[0]).replace("0b", "")), steps]
     
     else: 
@@ -82,7 +84,7 @@ def one_compliment(x):
 
 def twos_compliment(binary_numbers):
     if len(binary_numbers) == 1:
-        steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)"
+        steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
         compliment = one_compliment(binary_numbers) 
         return [str(bin(int(compliment[0], base = 2) + 1).replace('0b', '')), steps + compliment[1]]
     
@@ -92,8 +94,8 @@ def twos_compliment(binary_numbers):
 def bit_representation(decimal_numbers):
     
     if len(decimal_numbers) == 1:    
-        steps = "steps: 1. take log base 2 of the given binary string i.e log(" + str(decimal_numbers[0]) +", base = 2) = " + str(math.log(decimal_numbers[0], 2)) 
-        steps = steps + "2. take ceiling of the previous result like this: ceiling(" + str(math.log(decimal_numbers[0], 2)) + ") = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
+        steps = "steps: <br />1. take log base 2 of the given binary string i.e log(" + str(decimal_numbers[0]) +", base = 2) = " + str(math.log(decimal_numbers[0], 2)) 
+        steps = steps + "<br />2. take ceiling of the previous result like this: ceiling(" + str(math.log(decimal_numbers[0], 2)) + ") = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
         return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
@@ -120,16 +122,8 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         return ["Error! 2 args required, given 1.", ""]
 
 def binary_module(query):
-    keyword_list = [
-        'one', 'two', 'complement', 
-        'convert', 'compliment', 'represent' 
-        'number', 'any', 'bits',
-        'binary', 'decimal', '+', '-', 
-        'sum', 'difference', 'required'
-    ]
-
     tokenize = nltk.word_tokenize(query)
-    # print(tokenize)
+    print(tokenize)
 
     kwd = [x for x in tokenize if x in keyword_list] # get common keywords
     print(kwd) 
@@ -163,19 +157,17 @@ def binary_module(query):
         elif 'difference' in kwd or '-' in kwd:
             return binary_subtraction(binar_numbers, decimal_numbers)
 
-        elif 'convert' in kwd:
-            if "to decimal" in query or "binary to decimal" in query: 
+        elif 'convert' in kwd or 'write' in kwd:
+            if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
                 return binary_to_decimal(binar_numbers)
 
-            elif "to binary" in query or "decimal to binary" in query:
+            elif "to binary" in query or "decimal to binary" in query or 'binary' in query:
                 return decimal_to_binary(decimal_numbers)
         else:
             return ["query format not correct, please repeat the question again.", ""]
 
     except:
-
-        # raise Exception
-        return ["Sorry, I couldn't understand your question. Please repeat it again."]
+        raise Exception
 
 
 
@@ -186,3 +178,6 @@ def binary_module(query):
 # print(binary_module("convert 10101 to decimal"))
 # print(binary_module("convert 24 from decimal to binary"))
 # print(twos_compliment(['1101011']))
+
+# print(binary_module("how do i write 67 in binary"))
+# print(binary_module("how do i write 110101 in decimal"))

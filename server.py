@@ -48,7 +48,7 @@ def submit():
         response = ""
         if(len(result) > 1):
             result1 = result[1]
-            response = '{"result" : "' + result[0] + " STEPS =>" + result1 + '"}'
+            response = '{"result" : "' + result[0] + "<br /><b>STEPS:</b> <br/>" + result1 + '"}'
         else:
             response = '{"result" : "' + result[0] + '"}'
 
