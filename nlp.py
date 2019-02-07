@@ -123,7 +123,7 @@ def binary_addition(binary_numbers, decimal_numbers = None):
         return [bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", ''), '']
 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and 10, result is generated in base 10']
+        return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
 
     else:
         return ["Error! 2 args required, given 1.", ""]
@@ -133,7 +133,7 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         return [str(bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')), '']
 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and 10, result is generated in base 10']
+        return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
     
     else:
         return ["Error! 2 args required, given 1.", ""]
