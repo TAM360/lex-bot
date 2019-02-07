@@ -6,7 +6,7 @@ keyword_list = [
     'write', 'one', 'two','ones', 'twos', 
     "one's", "two's", 'compliment', 
     'convert', 'complement', 'represent' 
-    'number', 'bits',
+    'number', 'bits', 'value'
     'binary', 'decimal', '+', '-', 
     'sum', 'difference', 'required'
 ]
@@ -94,8 +94,8 @@ def twos_compliment(binary_numbers):
 def bit_representation(decimal_numbers):
     
     if len(decimal_numbers) == 1:    
-        steps = "steps: <br />1. take log base 2 of the given binary string i.e log(" + str(decimal_numbers[0]) +", base = 2) = " + str(math.log(decimal_numbers[0], 2)) 
-        steps = steps + "<br />2. take ceiling of the previous result like this: ceiling(" + str(math.log(decimal_numbers[0], 2)) + ") = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
+        steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
+        steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
         return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
@@ -157,7 +157,7 @@ def binary_module(query):
         elif 'difference' in kwd or '-' in kwd:
             return binary_subtraction(binar_numbers, decimal_numbers)
 
-        elif 'convert' in kwd or 'write' in kwd:
+        elif 'convert' in kwd or 'write' in kwd or 'represent':
             if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
                 return binary_to_decimal(binar_numbers)
 
