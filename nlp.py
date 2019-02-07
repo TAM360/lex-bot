@@ -68,7 +68,7 @@ def decimal_to_binary(decimal_numbers):
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
 
-def one_compliment(x):
+def one_compliment(x, y = None):
     if len(x) == 1:
         temp = ""
         for i in range(0, len(x[0])):
@@ -78,16 +78,33 @@ def one_compliment(x):
                 temp = temp + '0'
         print(temp)
         return [temp, "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"] 
+    
+    elif len(y) == 1:
+        temp = bin(int(y[0])).replace("0b", "")
+        print(temp)
+        temp2 = ""
 
+        for i in range(0, len(temp)):
+            if temp[i] == '0':
+                temp2 = temp2 + '1'
+            else: 
+                temp2 = temp2 + '0'
+        
+        print(temp2)
+        return [str(int("0b" + temp2, base = 2)), "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"]
+    
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
 
-def twos_compliment(binary_numbers):
+def twos_compliment(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 1:
         steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
         compliment = one_compliment(binary_numbers) 
         return [str(bin(int(compliment[0], base = 2) + 1).replace('0b', '')), steps + compliment[1]]
     
+    elif len(decimal_numbers) == 1:
+        return [str(~int(decimal_numbers[0]), ), "Apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"]
+
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
 
@@ -143,10 +160,10 @@ def binary_module(query):
 
     try:
         if (('one' in kwd or 'ones' in kwd or "one's" in kwd) or ('two' not in kwd and 'twos' not in kwd and "two's" not in kwd)) and ('compliment' in kwd or 'complement' in kwd):
-            return one_compliment(binar_numbers)
+            return one_compliment(binar_numbers, decimal_numbers)
     
         elif ('two' in kwd or 'twos' in kwd or "two's" in kwd) and ('compliment' in kwd or 'complement' in kwd):
-            return twos_compliment(binar_numbers)
+            return twos_compliment(binar_numbers, decimal_numbers)
 
         elif 'bits' in kwd: 
             return bit_representation(decimal_numbers)
@@ -167,8 +184,8 @@ def binary_module(query):
             return ["query format not correct, please repeat the question again.", ""]
 
     except:
-        raise Exception
-
+        # raise Exception
+        return ["Sorry!, can you repeat your question", ""]
 
 
 # print(binary_module("what's the one's compliment of 1010?"))
@@ -181,3 +198,6 @@ def binary_module(query):
 
 # print(binary_module("how do i write 67 in binary"))
 # print(binary_module("how do i write 110101 in decimal"))
+
+# print(binary_module("what's the one's compliment of 25?"))
+# print(binary_module("what's the two's compliment of 18?"))
