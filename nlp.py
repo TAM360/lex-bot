@@ -3,11 +3,12 @@ import re, math, json
 nltk.download('punkt')
 
 keyword_list = [
-    'write', 'one', 'two','ones', 'twos', 
+    'write', 'one', 'two','ones', 
+    'twos', 'binary', 
     "one's", "two's", 'compliment', 
     'convert', 'complement', 'represent' 
-    'number', 'bits', 'value'
-    'binary', 'decimal', '+', '-', 
+    'number', 'bits', 'value', 
+    'decimal', '+', '-', 
     'sum', 'difference', 'required'
 ]
 
@@ -29,7 +30,7 @@ def check_binary_format(string) :
     else: 
         return "no" 
 
-def binary_to_decimal(binary_numbers):
+def binary_to_decimal(binary_numbers, decimal_numbers =None):
     if len(binary_numbers) == 1:
         steps = 'Starting from LSB, take sum of (2*i)^x where i = bit value and x = bit position.<br />'
         steps = steps + ' For this example, <br /><b>' + binary_numbers[0] + ' = '
@@ -45,22 +46,30 @@ def binary_to_decimal(binary_numbers):
         steps = steps + '</b><br />'
         return [str(int(binary_numbers[0], base = 2)), steps[:len(steps) - 3]]
     
+    elif len(decimal_numbers) == 1:
+        return decimal_to_binary(decimal_numbers)
+
     else: 
         return ['Error! 1 argument required, given 0 or more than 1', ""]
 
 
 def decimal_to_binary(decimal_numbers):
+
     if len(decimal_numbers) == 1:
         steps = 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
         steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
         steps = steps + ' For this example, <br /> <b>'
 
         num = decimal_numbers[0]
-        count = 1
-        while (count <= math.ceil(math.log(int(num), 2))):
+        count = 0
+        carry = 0
+        while (count <= math.ceil(math.log(int(num), 2))+1):
             steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
-            steps = steps + ', carry = ' + str(int(2* num%2)) + '<br />'
+            carry = num % 2
+            num = num / 2
+            steps = steps + ', carry = ' + str(int(carry)) + '<br />'
             count = count + 1
+
         
         steps = steps + "<b/> <br/>"
         return [str(bin(decimal_numbers[0]).replace("0b", "")), steps]
@@ -184,7 +193,7 @@ def binary_module(query):
 
         elif 'convert' in kwd or 'write' in kwd or 'represent':
             if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
-                return binary_to_decimal(binar_numbers)
+                return binary_to_decimal(binar_numbers, decimal_numbers)
 
             elif "to binary" in query or "decimal to binary" in query or 'binary' in query:
                 return decimal_to_binary(decimal_numbers)
@@ -192,8 +201,8 @@ def binary_module(query):
             return ["query format not correct, please repeat the question again.", ""]
 
     except:
-        # raise Exception
-        return ["Sorry!, can you repeat your question", ""]
+        raise Exception
+        # return ["Sorry!, can you repeat your question", ""]
 
 
 # print(binary_module("what's the one's compliment of 1010?"))
@@ -201,7 +210,7 @@ def binary_module(query):
 # print(binary_module("what's the sum of 10101 and 11"))
 # print(binary_module("11010 - 001"))
 # print(binary_module("convert 10101 to decimal"))
-# print(binary_module("convert 24 from decimal to binary"))
+print(binary_module("convert 24 from decimal to binary "))
 # print(twos_compliment(['1101011']))
 
 # print(binary_module("how do i write 67 in binary"))
