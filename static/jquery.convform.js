@@ -88,6 +88,7 @@ ConvState.prototype.printQuestion = function(){
                 //console.log("response" + response)
                 question = data.result;
                 steps = data.steps;
+                console.log("steps : " + steps);
                 // console.log("obj uid" +  obj.userid);
                 //console.log("answer: " +  question + " steps " + question) ;
                 window.Steps = steps;
@@ -107,16 +108,25 @@ ConvState.prototype.printQuestion = function(){
             this.printAnswers(this.current.input.answers, this.current.input.multiple);
         }
         this.scrollDown();
+        var StepsDiv =$('<div class="message to showSteps"><a>Click Here to know more.</a> </div>');;
+        if(window.Steps){
+            $(this.wrapper).find('#messages').append(StepsDiv);
+            this.scrollDown();
+            $('.showSteps').off('click').on('click', function (){
+                if ($(window).width() > 575) {
+                    $('div.blur-overlay').fadeIn("slow");
+                }
+                $('.stepsDetails').html(window.Steps);
+                $('.stepsDetails').addClass('d-block').removeClass('d-none');
+            });
+        }
         if(this.current.input.hasOwnProperty('noAnswer') && this.current.input.noAnswer===true) {
             if(this.next()){
                 setTimeout(function(){
                     var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
-
                     $(this.wrapper).find('#messages').append(messageObj);
                     this.scrollDown();
                     this.printQuestion();
-                    //console.log("2");
-
                 }.bind(this),200);
             } else {
                 this.parameters.eventList.onSubmitForm(this);
@@ -393,7 +403,6 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
             setTimeout(function() {
                 $.when($('div.spinLoader').addClass('hidden')).done(function() {
                     var messageObj = $('<div class="message to typing"><div class="typing_loader"></div></div>');
-
                     $(state.wrapper).find('#messages').append(messageObj);
                     state.scrollDown();
                     state.printQuestion();

@@ -27,6 +27,37 @@ section#demo {
 .d-none{
 	display: none !important; 
 }
+.d-block{
+	display: block !important; 
+}
 #endText{
 	position: relative;
+}
+.showSteps{
+	cursor: pointer;
+}
+.blur-overlay{
+	position: fixed;
+	display: none;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	cursor: pointer;
+	background-color: #1A1A1A;
+	opacity: 0.7;
+	z-index: 1030;
+}
+.stepsDetails{
+	position: fixed;
+    top: 50%;
+    left: 50%;
+    margin-top: -9em;
+    margin-left: -15em;
+    border: 1px solid #ccc;
+    background-color: #dff0d8;
+    z-index: 1031;
+    padding: 45px;
+    margin-right: 15px;
+    right: 18%;
 }

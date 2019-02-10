@@ -14,9 +14,10 @@
     <script type="text/javascript" src="{{url_for('static', filename='autosize.min.js')}}"></script>
     <script type="text/javascript" src="{{url_for('static', filename='jquery.convform.js')}}"></script>
 </head>
-
 <body>
     <span id="UserID" style="display:none">-1</span> 
+    <div class="blur-overlay" style="display: none;"></div>
+    <div class="stepsDetails d-none"></div>
    <section id="demo">
 	    <div class="vertical-align">
 	        <div class="container">
@@ -26,7 +27,6 @@
 	                        <div id="chat" class="conv-form-wrapper ">
 	                            <form action="" method="POST" class="hidden">
 	                                <input type="text" name="question" data-conv-question="Okay! Please, tell me your name first.">
-	                                <!--<input type="text" name="question" data-conv-question="Okay! Please, tell me your name first.">-->
 	                            </form>
 							</div>
 						</div>
@@ -41,7 +41,7 @@
 	            </div>
 	        </div>
 	    </div>
-	</section>
+    </section>
     <script> 
         $(document).ready(function(e) {
             $('#form1').on('submit', function() {
@@ -89,6 +89,11 @@
         jQuery(function($) {
 
             var convForm = $('#chat').convform();
+            $('div.blur-overlay').off('click').on('click', function (){
+                $('div.blur-overlay').hide();
+                $('.stepsDetails').removeClass('d-block').addClass('d-none');
+                $('.stepsDetails').html("");
+            });
             console.log(convForm);
         });
     </script>
