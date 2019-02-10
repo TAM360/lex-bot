@@ -6,6 +6,7 @@ import random
 from bson.objectid import ObjectId
 import boto3
 from nlp import binary_module, compare
+import re
 
 app = Flask(__name__)
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 0
@@ -99,8 +100,12 @@ def submit():
             },
             inputText= request.form['keyword']
         )
-        print('response', type(response), response['message'])
-        result = '{"result" : "' + response['message'] + '"}'
+
+        print('response', type(response['message']), response['message'])
+        if '|' in response['message'] or 'noun' in response['message'] or 'verb' in response['message']:
+            result = '{"result" : ' + response['message'] + '}'
+        else:
+            result = '{"result" : "' + response['message'] + '"}'
         resp = make_response(result)
         print(addDataToMongo(kwd, response['message'], db))
     
