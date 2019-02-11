@@ -35,12 +35,12 @@ def binary_to_decimal(binary_numbers, decimal_numbers =None):
         steps = 'Starting from LSB, take sum of (2*i)^x where i = bit value and x = bit position.<br />'
         steps = steps + ' For this example, <br /><b>' + binary_numbers[0] + ' = '
         sum = 0
-        position = len(binary_numbers[0]) - 1
+        position = len(binary_numbers[0])
 
-        for i in range(0, len(binary_numbers[0]) - 1):
+        for i in range(0, len(binary_numbers[0]) ):
             sum = sum + (2 * int(binary_numbers[0][i], base = 2) ** position)
             position = position - 1
-            steps = steps + '2*' + binary_numbers[0][i] + '^' + str(position) + ' + '
+            steps = steps + '(2*' + binary_numbers[0][i] + ')<sup>' + str(position) + '</sup> + '
         
         steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
         steps = steps + '</b><br />'
@@ -63,7 +63,8 @@ def decimal_to_binary(decimal_numbers):
         num = decimal_numbers[0]
         count = 0
         carry = 0
-        while (count <= math.ceil(math.log(int(num), 2))+1):
+        bits = math.ceil(math.log(int(num), 2))
+        while (count < bits):
             steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
             carry = num % 2
             num = num / 2
@@ -100,7 +101,7 @@ def one_compliment(x, y = None):
                 temp2 = temp2 + '0'
         
         print(temp2)
-        return [str(int("0b" + temp2, base = 2)), "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"]
+        return [str(int("0b" + temp2, base = 2)), "convert decimal number into binary <br /> then invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"]
     
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -112,7 +113,10 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         return [str(bin(int(compliment[0], base = 2) + 1).replace('0b', '')), steps + compliment[1]]
     
     elif len(decimal_numbers) == 1:
-        return [str(~int(decimal_numbers[0]), ), "Apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"]
+        temp = [bin(decimal_numbers[0]).replace("0b", "")]
+        compliment = one_compliment(temp)
+        sum = int("0b" + compliment[0], base = 2) + 1
+        return [str(sum), "convert decimal number into binary <br /> then apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"]
 
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -122,6 +126,7 @@ def bit_representation(decimal_numbers):
     if len(decimal_numbers) == 1:    
         steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
         steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
+        steps = steps + "<br /> <b>Note: The answer has to be a interference, so we round up to the nearest biggest interger.</b>"
         return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
@@ -217,4 +222,4 @@ def binary_module(query):
 # print(binary_module("how do i write 110101 in decimal"))
 
 # print(binary_module("what's the one's compliment of 25?"))
-# print(binary_module("what's the two's compliment of 18?"))
+# print(binary_module("what's the two's compliment of 24"))
