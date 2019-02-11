@@ -144,6 +144,13 @@ def binary_addition(binary_numbers, decimal_numbers = None):
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
         return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
 
+    elif len(decimal_numbers) == 2:
+        return [str(decimal_numbers[0] + decimal_numbers[1]), 
+        "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"\
+        "Step 2: Add extra zeros to the right of the number so that each number has the same number of digits to the right of the decimal place.<br/ />"\
+        "Step 3:  Add the numbers as you would whole numbers.  Place the decimal point of the result in line with the other decimal points.<br />"
+    ]
+
     else:
         return ["Error! 2 args required, given 1.", ""]
 
@@ -157,6 +164,13 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
         return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
     
+    elif len(decimal_numbers) == 2:
+        return [str(decimal_numbers[0] -  decimal_numbers[1]), 
+        "Step 1: Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"\
+        "Step 2: Add extra zeros to the right of the number so that each number has the same number of digits to the right of the decimal place.<br/ />"\
+        "Step 3: Subtract the numbers as you would whole numbers. Place the decimal point of the result in line with the other decimal points.<br />"
+    ]
+
     else:
         return ["Error! 2 args required, given 1.", ""]
 
@@ -223,3 +237,6 @@ def binary_module(query):
 
 # print(binary_module("what's the one's compliment of 25?"))
 # print(binary_module("what's the two's compliment of 24"))
+
+# print(binary_module("26 - 9"))
+# print(binary_module("26 + 12"))
