@@ -17,7 +17,10 @@
 <body>
     <span id="UserID" style="display:none">-1</span> 
     <div class="blur-overlay" style="display: none;"></div>
-    <div class="stepsDetails d-none"></div>
+    <div class="stepsDiv d-none">
+        <div class="stepsClose">X</div>
+        <div class="stepsDetails"></div>
+    </div>
    <section id="demo">
 	    <div class="vertical-align">
 	        <div class="container">
@@ -91,7 +94,12 @@
             var convForm = $('#chat').convform();
             $('div.blur-overlay').off('click').on('click', function (){
                 $('div.blur-overlay').hide();
-                $('.stepsDetails').removeClass('d-block').addClass('d-none');
+                $('.stepsDiv').removeClass('d-flex').addClass('d-none');
+                $('.stepsDetails').html("");
+            });
+            $('div.stepsClose').off('click').on('click', function (){
+                $('div.blur-overlay').hide();
+                $('.stepsDiv').removeClass('d-flex').addClass('d-none');
                 $('.stepsDetails').html("");
             });
             console.log(convForm);

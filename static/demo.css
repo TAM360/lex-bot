@@ -30,6 +30,9 @@ section#demo {
 .d-block{
 	display: block !important; 
 }
+.d-flex{
+	display: flex !important; 
+}
 #endText{
 	position: relative;
 }
@@ -49,6 +52,20 @@ section#demo {
 	z-index: 1030;
 }
 .stepsDetails{
+    padding-left: 45px;
+    padding-right: 45px;
+	padding-bottom: 45px;
+}
+.stepsClose{
+    align-items: flex-end;
+    display: flex;
+    flex-flow: column;
+	justify-content: right;
+    padding-right: 10px;
+	padding-top: 10px;
+	cursor: pointer;
+}
+.stepsDiv-lg{
 	position: fixed;
     top: 50%;
     left: 50%;
@@ -57,7 +74,15 @@ section#demo {
     border: 1px solid #ccc;
     background-color: #dff0d8;
     z-index: 1031;
-    padding: 45px;
     margin-right: 15px;
-    right: 18%;
+	right: 18%;
+    flex-flow: column;
+}
+.stepsDiv-sm{
+	position: fixed;
+    border: 1px solid #ccc;
+    background-color: #dff0d8;
+    z-index: 1031;
+    flex-flow: column;
+    height: 100%;
 }

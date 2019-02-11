@@ -108,16 +108,19 @@ ConvState.prototype.printQuestion = function(){
             this.printAnswers(this.current.input.answers, this.current.input.multiple);
         }
         this.scrollDown();
-        var StepsDiv =$('<div class="message to showSteps"><a>Click Here to know more.</a> </div>');;
+        var StepsDiv =$('<div class="message to showSteps"><a>Click here for explanation.</a> </div>');;
         if(window.Steps){
             $(this.wrapper).find('#messages').append(StepsDiv);
             this.scrollDown();
             $('.showSteps').off('click').on('click', function (){
-                if ($(window).width() > 575) {
-                    $('div.blur-overlay').fadeIn("slow");
+                $('div.blur-overlay').fadeIn("fast");
+                if ($(window).width() < 575) {
+                    $('.stepsDiv').addClass('stepsDiv-sm').removeClass('stepsDiv-lg');
+                } else{
+                    $('.stepsDiv').addClass('stepsDiv-lg').removeClass('stepsDiv-sm');
                 }
                 $('.stepsDetails').html(window.Steps);
-                $('.stepsDetails').addClass('d-block').removeClass('d-none');
+                $('.stepsDiv').addClass('d-flex').removeClass('d-none');
             });
         }
         if(this.current.input.hasOwnProperty('noAnswer') && this.current.input.noAnswer===true) {
