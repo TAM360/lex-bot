@@ -40,8 +40,9 @@ def binary_to_decimal(binary_numbers, decimal_numbers =None):
         for i in range(0, len(binary_numbers[0]) ):
             sum = sum + (2 * int(binary_numbers[0][i], base = 2) ** position)
             position = position - 1
-            steps = steps + '(2*' + binary_numbers[0][i] + ')<sup>' + str(position) + '</sup> + '
+            steps = steps + '(2*' + binary_numbers[0][i] + ')^' + str(position) + ' + '
         
+        steps = steps[0: len(steps) - 2]
         steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
         steps = steps + '</b><br />'
         return [str(int(binary_numbers[0], base = 2)), steps[:len(steps) - 3]]
@@ -149,7 +150,7 @@ def bit_representation(decimal_numbers):
     if len(decimal_numbers) == 1:    
         steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
         steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
-        steps = steps + "<br /> <b>Note: The answer has to be a interference, so we round up to the nearest biggest interger.</b>"
+        steps = steps + "<br /> <b>Note: The answer has to be a integer, so we round up to the nearest biggest interger.</b>"
         return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
