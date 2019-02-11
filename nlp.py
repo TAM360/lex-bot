@@ -101,7 +101,18 @@ def one_compliment(x, y = None):
                 temp2 = temp2 + '0'
         
         print(temp2)
-        return [str(int("0b" + temp2, base = 2)), "convert decimal number into binary <br /> then invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"]
+
+        result = decimal_to_binary(y)
+        steps = "First, convert decimal number into binary number.<br />"\
+            "To convert decimal number into binary, "
+        
+        steps = steps + result[1] 
+        steps = steps + "<br /> Then, invert every bit of the given bit string i.e change 0 to 1 and 1 to 0."
+        steps = steps + "<br /> Finally, convert the result back to decimal format. For this,"\
+            " follow the following steps: <br />"
+
+        steps = steps + binary_to_decimal([temp2])[1]
+        return [str(int("0b" + temp2, base = 2)), steps]
     
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -116,7 +127,19 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         temp = [bin(decimal_numbers[0]).replace("0b", "")]
         compliment = one_compliment(temp)
         sum = int("0b" + compliment[0], base = 2) + 1
-        return [str(sum), "convert decimal number into binary <br /> then apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"]
+        
+        result = decimal_to_binary(decimal_numbers)
+        steps = "First, convert decimal number into binary number.<br />"\
+            "To convert decimal number into binary, "
+        
+        steps = steps + result[1] 
+        steps = steps + "<br /> Then, apply one's compliment to binary string and then add 1 to LSB (Least Significant Bit)"
+        steps = steps + "<br /> Finally, convert the result back to decimal format. For this,"\
+            " follow the following steps: <br />"
+
+        steps = steps + binary_to_decimal([compliment[0]])[1]
+
+        return [str(sum), steps]
 
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -220,8 +243,8 @@ def binary_module(query):
             return ["query format not correct, please repeat the question again.", ""]
 
     except:
-        raise Exception
-        # return ["Sorry!, can you repeat your question", ""]
+        # raise Exception
+        return ["Sorry!, can you repeat your question", ""]
 
 
 # print(binary_module("what's the one's compliment of 1010?"))
@@ -235,7 +258,7 @@ def binary_module(query):
 # print(binary_module("how do i write 67 in binary"))
 # print(binary_module("how do i write 110101 in decimal"))
 
-# print(binary_module("what's the one's compliment of 25?"))
+# print(binary_module("what's the one's compliment of 25"))
 # print(binary_module("what's the two's compliment of 24"))
 
 # print(binary_module("26 - 9"))
