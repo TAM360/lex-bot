@@ -211,7 +211,7 @@ def binary_module(query):
     # isolate decimal and binary number arguments. 
     for i in tokenize:
         if re.match(r'[0-9]', i): 
-            if check_binary_format(i) == "yes":
+            if check_binary_format(i) == "yes" and "base10" not in query and "base ten" not in query:
                 binar_numbers.append(i)
             else:
                 decimal_numbers.append(int(i))
