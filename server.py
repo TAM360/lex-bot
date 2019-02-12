@@ -75,7 +75,11 @@ def submit():
                 "5. convert 10101 to decimal <br/>"\
                 "6. convert 24 from decimal to binary <br/></b><br />"\
                 "<b>University Module:</b>This module can answer questions about<br />"\
-                "program details, available courses etc <br />"
+                "program details, available courses etc <br />"\
+                "<b>Note:</b></br>for any number that only consists of 0's and 1's<br />"\
+                "if you don't use any keyword, the Chatbot will consider the format as binary format,<br />"\
+                "if you need to use it as decimal, either write 'base10' or 'base ten' after the number<br />"\
+                "Because we can't use decimal or binary as a keyword for detection,<br /> they are already being used for another purpose and it will make it unstable for using"
         print(guide)
         result = '{"result" : "' + guide + '"}'
         resp = make_response(result)

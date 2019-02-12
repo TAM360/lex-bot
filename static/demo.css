@@ -55,6 +55,7 @@ section#demo {
     padding-left: 45px;
     padding-right: 45px;
 	padding-bottom: 45px;
+	overflow-y:auto
 }
 .stepsClose{
     align-items: flex-end;
@@ -66,8 +67,8 @@ section#demo {
 	cursor: pointer;
 }
 .stepsDiv-lg{
-	position: fixed;
-    top: 50%;
+	position: absolute;
+    top: 25%;
     left: 50%;
     margin-top: -9em;
     margin-left: -15em;
@@ -76,14 +77,14 @@ section#demo {
     z-index: 1031;
     margin-right: 15px;
 	right: 18%;
-    flex-flow: column;
+	flex-flow: column;
+	
 }
 .stepsDiv-sm{
-	position: fixed;
+	position: absolute;
     border: 1px solid #ccc;
     background-color: #dff0d8;
     z-index: 1031;
     flex-flow: column;
 	height: 100%;
-	
-}
+ }
