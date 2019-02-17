@@ -80,18 +80,19 @@ ConvState.prototype.printQuestion = function(){
             async: false,
             success: function(data) { 
                 console.log(data);
-                // var obj =  data;
-                // $("#UserID").text( obj.userid);
-                // question = data.replace('\n', '').replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/\d+]/, '');
-
-                //response = JSON.parse(data);
-                //console.log("response" + response)
+                
                 question = data.result;
                 steps = data.steps;
-                console.log("steps : " + steps);
-                // console.log("obj uid" +  obj.userid);
-                //console.log("answer: " +  question + " steps " + question) ;
-                window.Steps = steps;
+                if(steps){
+                    if(steps == ""){
+                        window.Steps = undefined
+                    } else{
+                        window.Steps = steps;
+                    }
+                }else{
+                    window.Steps = steps;
+                }
+                
             },
             error: function(jqXHR) {
                 alert("error: " + jqXHR.status);
@@ -108,7 +109,7 @@ ConvState.prototype.printQuestion = function(){
             this.printAnswers(this.current.input.answers, this.current.input.multiple);
         }
         this.scrollDown();
-        var StepsDiv =$('<div class="message to showSteps"><a>Click here for explanation.</a> </div>');;
+        var StepsDiv =$('<div class="message to showSteps"><a>Click here for explanation.</a> <span class="onClickDetails d-none">'+ window.Steps +'</span></div>');;
         if(window.Steps){
             $(this.wrapper).find('#messages').append(StepsDiv);
             this.scrollDown();
@@ -119,7 +120,7 @@ ConvState.prototype.printQuestion = function(){
                 } else{
                     $('.stepsDiv').addClass('stepsDiv-lg').removeClass('stepsDiv-sm');
                 }
-                $('.stepsDetails').html(window.Steps);
+                $('.stepsDetails').html($(this).find('.onClickDetails').html());
                 $('.stepsDiv').addClass('d-flex').removeClass('d-none');
             });
         }
@@ -235,13 +236,9 @@ ConvState.prototype.answerWith = function(answerText, answerObject) {
     }.bind(this), 150);
 
     this.parameters.eventList.onInputSubmit(this, function(){
-        //goes to next state and prints question
-        //console.log("5")
         if(this.next()){
             setTimeout(function(){
-                this.printQuestion();
-                //console.log("3 " + window.Steps);
-                
+                this.printQuestion();                
 
             }.bind(this), 300);
         } else {

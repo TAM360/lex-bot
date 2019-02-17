@@ -68,17 +68,16 @@ section#demo {
 }
 .stepsDiv-lg{
 	position: absolute;
-    top: 25%;
-    left: 50%;
+    top: 44%;
+    left: 42%;
     margin-top: -9em;
     margin-left: -15em;
     border: 1px solid #ccc;
     background-color: #dff0d8;
     z-index: 1031;
     margin-right: 15px;
-	right: 18%;
-	flex-flow: column;
-	
+    right: 18%;
+    flex-flow: column;
 }
 .stepsDiv-sm{
 	position: absolute;

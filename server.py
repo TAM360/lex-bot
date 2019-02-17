@@ -42,20 +42,15 @@ def submit():
     
     if len(compare(kwd)) > 0: 
         result = binary_module(kwd)
-        print (type(result))
-        print('result', result[0], type(result))
 
         result1 = ""
         response = ""
         if(len(result) > 1):
             result1 = result[1]
             response = '{"result" : "' + result[0] + '", "steps": "<br /><b>STEPS:</b> <br/>' + result1 + '"}'
-            print (response)
         else:
             response = '{"result" : "' + result[0] + '"}'
 
-        print('result1', result1, type(result1))
-        print('response', response, type(response))
         resp = make_response(response)
         print(addDataToMongo(kwd, result[0], db))
 
@@ -76,11 +71,10 @@ def submit():
                 "6. convert 24 from decimal to binary <br/></b><br />"\
                 "<b>University Module:</b>This module can answer questions about<br />"\
                 "program details, available courses etc <br />"\
-                "<b>Note:</b></br>for any number that only consists of 0's and 1's<br />"\
+                "<b>Note:</b><br/>add spaces between operator and operands <br/>i.e. 100 - 10 and 100 + 10. <br/>100-10 and 100+10 will not be entertained.</br>for any number that only consists of 0's and 1's<br />"\
                 "if you don't use any keyword, the Chatbot will consider the format as binary format,<br />"\
                 "if you need to use it as decimal, either write 'base10' or 'base ten' after the number<br />"\
                 "Because we can't use decimal or binary as a keyword for detection,<br /> they are already being used for another purpose and it will make it unstable for using"
-        print(guide)
         result = '{"result" : "' + guide + '"}'
         resp = make_response(result)
 

@@ -3,10 +3,10 @@ import re, math, json
 nltk.download('punkt')
 
 keyword_list = [
-    'write', 'one', 'two','ones', 
+    'write', 'one', 'two','ones',
     'twos', 'binary', 
     "one's", "two's", 'compliment', 
-    'convert', 'complement', 'represent' 
+    'convert', 'complement', 'represent',
     'number', 'bits', 'value', 
     'decimal', '+', '-', 
     'sum', 'difference', 'required'
@@ -44,7 +44,7 @@ def binary_to_decimal(binary_numbers, decimal_numbers =None):
         
         steps = steps[0: len(steps) - 2]
         steps = steps + ' = ' + str(int(binary_numbers[0], base = 2)) 
-        steps = steps + '</b><br />'
+        steps = steps + '</b><br/>'
         return [str(int(binary_numbers[0], base = 2)), steps[:len(steps) - 3]]
     
     elif len(decimal_numbers) == 1:
@@ -60,20 +60,22 @@ def decimal_to_binary(decimal_numbers):
         steps = 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
         steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
         steps = steps + ' For this example, <br /> <b>'
-
         num = decimal_numbers[0]
-        count = 0
-        carry = 0
-        bits = math.ceil(math.log(int(num), 2))
-        while (count < bits):
-            steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
-            carry = num % 2
-            num = num / 2
-            steps = steps + ', carry = ' + str(int(carry)) + '<br />'
-            count = count + 1
+        steps = ""
+        if(num > 0):
+            count = 0
+            carry = 0
+            bits = math.ceil(math.log(int(num), 2))
+            while (count < bits):
+                steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+                carry = num % 2
+                num = num / 2
+                steps = steps + ', carry = ' + str(int(carry)) + '<br />'
+                count = count + 1
+            steps = steps + "<b/> <br/>"
+        else: 
+            steps = "<b> its a signed number.</b>"
 
-        
-        steps = steps + "<b/> <br/>"
         return [str(bin(decimal_numbers[0]).replace("0b", "")), steps]
     
     else: 
@@ -113,7 +115,7 @@ def one_compliment(x, y = None):
             " follow the following steps: <br />"
 
         steps = steps + binary_to_decimal([temp2])[1]
-        return [str(int("0b" + temp2, base = 2)), steps]
+        return ["Base 2: ( " + temp2 + " ) , Base 10: ( " + str(int("0b" + temp2, base = 2)) + ')', steps]
     
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -121,15 +123,19 @@ def one_compliment(x, y = None):
 def twos_compliment(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 1:
         steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
-        compliment = one_compliment(binary_numbers) 
-        return [str(bin(int(compliment[0], base = 2) + 1).replace('0b', '')), steps + compliment[1]]
+        compliment = one_compliment(binary_numbers)
+        bitlen = compliment[0].__len__()
+        
+        answer = str(bin(int(compliment[0], base = 2) + 1).replace('0b', ''))
+        answer = answer.zfill(bitlen)
+        return [answer , steps + compliment[1]]
     
     elif len(decimal_numbers) == 1:
         temp = [bin(decimal_numbers[0]).replace("0b", "")]
         compliment = one_compliment(temp)
         sum = int("0b" + compliment[0], base = 2) + 1
-        
-        result = decimal_to_binary(decimal_numbers)
+       
+        result = decimal_to_binary([sum])
         steps = "First, convert decimal number into binary number.<br />"\
             "To convert decimal number into binary, "
         
@@ -137,10 +143,10 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         steps = steps + "<br /> Then, apply one's compliment to binary string and then add 1 to LSB (Least Significant Bit)"
         steps = steps + "<br /> Finally, convert the result back to decimal format. For this,"\
             " follow the following steps: <br />"
-
-        steps = steps + binary_to_decimal([compliment[0]])[1]
-
-        return [str(sum), steps]
+        steps = steps + binary_to_decimal([result[0]])[1]
+        
+        dec_answer = "Base 2 ( " + result[0] + " ) , Base 10 ( " +str(sum) + ' )'
+        return [dec_answer, steps]
 
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
@@ -150,7 +156,7 @@ def bit_representation(decimal_numbers):
     if len(decimal_numbers) == 1:    
         steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
         steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
-        steps = steps + "<br /> <b>Note: The answer has to be a integer, so we round up to the nearest biggest interger.</b>"
+        steps = steps + "<br /> <b>Note: The answer has to be a integer, so we round up to the nearest biggest integer.</b>"
         return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
     
     else: 
@@ -169,11 +175,28 @@ def binary_addition(binary_numbers, decimal_numbers = None):
         return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
 
     elif len(decimal_numbers) == 2:
-        return [str(decimal_numbers[0] + decimal_numbers[1]), 
-        "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"\
-        "Step 2: Add extra zeros to the right of the number so that each number has the same number of digits to the right of the decimal place.<br/ />"\
-        "Step 3:  Add the numbers as you would whole numbers.  Place the decimal point of the result in line with the other decimal points.<br />"
-    ]
+        op0 = decimal_to_binary([decimal_numbers[0]])[0]
+        op1 = decimal_to_binary([decimal_numbers[1]])[0]
+        ans = decimal_to_binary([decimal_numbers[0] + decimal_numbers[1]])[0]
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+
+        steps= "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"
+        steps = steps + "Step 2:  Add the numbers as you would whole numbers.  Place the decimal point of the result in line with the other decimal points.<br />"
+
+        steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
+
+        return [str(decimal_numbers[0] + decimal_numbers[1]), steps]
 
     else:
         return ["Error! 2 args required, given 1.", ""]
@@ -189,11 +212,27 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
     
     elif len(decimal_numbers) == 2:
-        return [str(decimal_numbers[0] -  decimal_numbers[1]), 
-        "Step 1: Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"\
-        "Step 2: Add extra zeros to the right of the number so that each number has the same number of digits to the right of the decimal place.<br/ />"\
-        "Step 3: Subtract the numbers as you would whole numbers. Place the decimal point of the result in line with the other decimal points.<br />"
-    ]
+        op0 = decimal_to_binary([decimal_numbers[0]])[0]
+        op1 = decimal_to_binary([decimal_numbers[1]])[0]
+        ans = decimal_to_binary([decimal_numbers[0] - decimal_numbers[1]])[0]
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+        
+        steps= "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"
+        steps = steps + "Step 2: Subtract the numbers as you would whole numbers. Place the decimal point of the result in line with the other decimal points.<br />"
+
+        steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
+        return [str(decimal_numbers[0] -  decimal_numbers[1]), steps]
 
     else:
         return ["Error! 2 args required, given 1.", ""]
@@ -245,7 +284,7 @@ def binary_module(query):
 
     except:
         # raise Exception
-        return ["Sorry!, can you repeat your question", ""]
+        return ["Sorry, can you repeat your question", ""]
 
 
 # print(binary_module("what's the one's compliment of 1010?"))
