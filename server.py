@@ -74,7 +74,8 @@ def submit():
                 "<b>Note:</b><br/>add spaces between operator and operands <br/>i.e. 100 - 10 and 100 + 10. <br/>100-10 and 100+10 will not be entertained.</br>for any number that only consists of 0's and 1's<br />"\
                 "if you don't use any keyword, the Chatbot will consider the format as binary format,<br />"\
                 "if you need to use it as decimal, either write 'base10' or 'base ten' after the number<br />"\
-                "Because we can't use decimal or binary as a keyword for detection,<br /> they are already being used for another purpose and it will make it unstable for using"
+                "Because we can't use decimal or binary as a keyword for detection,<br /> they are already being used for another purpose and it will make it unstable for using.<br/>"\
+                "Don't use <b><i>1's, 1s, 2's and 2s</b></i> as keywords for one's and two's complement."
         result = '{"result" : "' + guide + '"}'
         resp = make_response(result)
 
@@ -98,14 +99,18 @@ def submit():
             },
             inputText= request.form['keyword']
         )
-
-        print('response', type(response['message']), response['message'])
-        if '|' in response['message'] or 'noun' in response['message'] or 'verb' in response['message']:
-            result = '{"result" : ' + response['message'] + '}'
-        else:
-            result = '{"result" : "' + response['message'] + '"}'
+        
+        lexResponse = response['message'].replace('"', "")
+       
+        print('response', type(response), response.__str__())
+        #if '|' in lexResponse or 'noun' in lexResponse or 'verb' in lexResponse:
+        #    result = '{"result" : ' + lexResponse + '}'
+        #else:
+        lexResponse = lexResponse.replace("\\n", "<br/>")
+        result = '{"result" : "' + lexResponse + '"}'
+        print ("result " + result)
         resp = make_response(result)
-        print(addDataToMongo(kwd, response['message'], db))
+        print(addDataToMongo(kwd, lexResponse, db))
     
     print ('resp', resp)
     resp.status_code = 200
