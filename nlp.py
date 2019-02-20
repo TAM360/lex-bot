@@ -61,7 +61,6 @@ def decimal_to_binary(decimal_numbers):
         steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
         steps = steps + ' For this example, <br /> <b>'
         num = decimal_numbers[0]
-        steps = ""
         if(num > 0):
             count = 0
             carry = 0
@@ -164,15 +163,48 @@ def bit_representation(decimal_numbers):
 
 def binary_addition(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 2:
-        return [bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", ''), 
+        op0 = binary_numbers[0]
+        op1 = binary_numbers[1]
+        ans = bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", '')
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+
+        return [ans, 
                 'Starting from LSB (assumming both arguments to be in base 2), add the bits of each '\
                 'argument.<br/ >if the sum is equal to 10 (2 in decimal), then add the carry in next<br />'\
                 'bit of 1st argument and place 0 in the final answer.<br />If the sum of bits from both '\
                 'arguments is 11 (3 in decimal) then place 1 in the final result and add 1 in the next bit of<br />'\
-                'the first argument. Keep repeating these steps untill MSB is reached.<br />']
-
+                'the first argument. Keep repeating these steps untill MSB is reached.'\
+                '<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans
+                ]
+ 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        return [str(int(binary_numbers[0], 2) + decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
+        op0 = binary_numbers[0]
+        op1 = decimal_to_binary([decimal_numbers[0]])[0]
+        ans = bin(int(binary_numbers[0], 2) + decimal_numbers[0]).replace("0b", '')
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+        return ["Base 2 ( " + ans + " ) , Base 10 ( " + str(int(binary_numbers[0], 2) + decimal_numbers[0]) + ' )', '<br /> Step 1: convert the decimal number in to binary <br/> Step 2: apply binary addition on the operands <br/> Step 3: convert the answer in decimal because the result is to be displaced in decimal.<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans]
 
     elif len(decimal_numbers) == 2:
         op0 = decimal_to_binary([decimal_numbers[0]])[0]
@@ -191,9 +223,10 @@ def binary_addition(binary_numbers, decimal_numbers = None):
             op0 = op0.zfill(anslen)
             op1 = op1.zfill(anslen)
 
-        steps= "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"
-        steps = steps + "Step 2:  Add the numbers as you would whole numbers.  Place the decimal point of the result in line with the other decimal points.<br />"
-
+        steps= "Step 1: Convert the input decimal numbers into binary.<br />"
+        steps = steps + "Step 2: Line up the converted binary digits horizontally for both binary numbers so that all binary points for both numbers lie on a horizontal line.<br />"
+        steps = steps + "Step 3: Perform the binary subtraction operation on the numbers bit by bit.<br />"
+        steps = steps + "Step 4: The answer in binary is shown below whereas the answer in decimal is on the main screen.<br />"
         steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
 
         return [str(decimal_numbers[0] + decimal_numbers[1]), steps]
@@ -203,14 +236,47 @@ def binary_addition(binary_numbers, decimal_numbers = None):
 
 def binary_subtraction(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 2:
-        return [str(bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')), 
-        'Binary subtraction is also similar to that of decimal subtraction with the difference that when<br />'\
-        "1 is subtracted from 0, it is necessary to borrow 1 from the next higher order bit<br />"\
-        'and that bit is reduced by 1 (or 1 is added to the next bit of subtrahend) and the remainder is 1<br />']
+        op0 = binary_numbers[0]
+        op1 = binary_numbers[1]
+        ans = bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+
+        return [ans, 
+                'Binary subtraction is also similar to that of decimal subtraction with the difference that when<br />'\
+                "1 is subtracted from 0, it is necessary to borrow 1 from the next higher order bit<br />"\
+                'and that bit is reduced by 1 (or 1 is added to the next bit of subtrahend) and the remainder is 1<br />'\
+                '<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans
+                ]
+       
 
     elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        return [str(int(binary_numbers[0], 2) - decimal_numbers[0]), '<br /> since arguments were in base 2 and base 10, result is generated in base 10']
-    
+        op0 = binary_numbers[0]
+        op1 = decimal_to_binary([decimal_numbers[0]])[0]
+        ans = bin(int(binary_numbers[0], 2) - decimal_numbers[0]).replace("0b", '')
+        op0len = op0.__len__() 
+        op1len = op1.__len__()
+        anslen = ans.__len__()
+        if(op0len > op1len):
+            op1 = op1.zfill(op0len)
+            ans = ans.zfill(op0len)
+        else:
+            op0 = op0.zfill(op1len)
+            ans = ans.zfill(op1len)
+        if(anslen > op0len or anslen > op1len):
+            op0 = op0.zfill(anslen)
+            op1 = op1.zfill(anslen)
+        return ["Base 2 ( " + ans + " ) , Base 10 ( " + str(int(binary_numbers[0], 2) - decimal_numbers[0]) + ' )', '<br /> Step 1: convert the decimal number in to binary <br/> Step 2: apply binary subtraction on the operands <br/> Step 3: convert the answer in decimal because the result is to be displaced in decimal.<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans]    
     elif len(decimal_numbers) == 2:
         op0 = decimal_to_binary([decimal_numbers[0]])[0]
         op1 = decimal_to_binary([decimal_numbers[1]])[0]
@@ -228,9 +294,10 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
             op0 = op0.zfill(anslen)
             op1 = op1.zfill(anslen)
         
-        steps= "Step 1:  Line up the numbers vertically so that the decimal points all lie on a vertical line.<br />"
-        steps = steps + "Step 2: Subtract the numbers as you would whole numbers. Place the decimal point of the result in line with the other decimal points.<br />"
-
+        steps= "Step 1: Convert the input decimal numbers into binary.<br />"
+        steps = steps + "Step 2: Line up the converted binary digits horizontally for both binary numbers so that all binary points for both numbers lie on a horizontal line.<br />"
+        steps = steps + "Step 3: Perform the binary subtraction operation on the numbers bit by bit.<br />"
+        steps = steps + "Step 4: The answer in binary is shown below whereas the answer in decimal is on the main screen.<br />"
         steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
         return [str(decimal_numbers[0] -  decimal_numbers[1]), steps]
 
