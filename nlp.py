@@ -1,7 +1,9 @@
 import nltk
 import re, math, json
 nltk.download('punkt')
-
+required_bits= 4
+default_bits = 0
+isSigned = 1
 keyword_list = [
     'write', 'one', 'two','ones',
     'twos', 'binary', 
@@ -74,25 +76,32 @@ def decimal_to_binary(decimal_numbers):
             steps = steps + "<b/> <br/>"
         else: 
             steps = "<b> its a signed number.</b>"
-
-        return [str(bin(decimal_numbers[0]).replace("0b", "")), steps]
+        answer = str(bin(decimal_numbers[0]).replace("0b", ""))
+        answer.zfill(required_bits)
+        return [answer, steps]
     
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
 
 def one_compliment(x, y = None):
     if len(x) == 1:
+        a = x[0]
+        a = a.zfill(required_bits)
         temp = ""
-        for i in range(0, len(x[0])):
-            if x[0][i] == '0':
+        for i in range(0, len(a)):
+            if a[i] == '0':
                 temp = temp + '1'
             else: 
                 temp = temp + '0'
         print(temp)
-        return [temp, "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0"] 
+        result = "invert every bit of the given bit string i.e change 0 to 1 and 1 to 0 : <br />" + a + " ==> " +  temp
+        print(result)
+
+        return [temp,result] 
     
     elif len(y) == 1:
         temp = bin(int(y[0])).replace("0b", "")
+        temp = temp.zfill(required_bits)
         print(temp)
         temp2 = ""
 
@@ -124,9 +133,9 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
         compliment = one_compliment(binary_numbers)
         bitlen = compliment[0].__len__()
-        
         answer = str(bin(int(compliment[0], base = 2) + 1).replace('0b', ''))
         answer = answer.zfill(bitlen)
+        answer = answer.zfill(required_bits)
         return [answer , steps + compliment[1]]
     
     elif len(decimal_numbers) == 1:
@@ -135,15 +144,16 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         sum = int("0b" + compliment[0], base = 2) + 1
        
         result = decimal_to_binary([sum])
+
         steps = "First, convert decimal number into binary number.<br />"\
             "To convert decimal number into binary, "
-        
+
         steps = steps + result[1] 
         steps = steps + "<br /> Then, apply one's compliment to binary string and then add 1 to LSB (Least Significant Bit)"
         steps = steps + "<br /> Finally, convert the result back to decimal format. For this,"\
             " follow the following steps: <br />"
         steps = steps + binary_to_decimal([result[0]])[1]
-        
+        result[0] = result[0].zfill(required_bits)
         dec_answer = "Base 2 ( " + result[0] + " ) , Base 10 ( " +str(sum) + ' )'
         return [dec_answer, steps]
 
@@ -151,12 +161,13 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         return ["Error! 1 argumnent required, given 0.", ""]
 
 def bit_representation(decimal_numbers):
-    
+
     if len(decimal_numbers) == 1:    
         steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
         steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
         steps = steps + "<br /> <b>Note: The answer has to be a integer, so we round up to the nearest biggest integer.</b>"
-        return [str(math.ceil(math.log(decimal_numbers[0], 2))), steps]
+        answer = str(math.ceil(math.log(decimal_numbers[0], 2)))
+        return [answer, steps]
     
     else: 
         return ['Error! 1 arg required, given 0', ""]
@@ -166,6 +177,7 @@ def binary_addition(binary_numbers, decimal_numbers = None):
         op0 = binary_numbers[0]
         op1 = binary_numbers[1]
         ans = bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", '')
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -192,6 +204,7 @@ def binary_addition(binary_numbers, decimal_numbers = None):
         op0 = binary_numbers[0]
         op1 = decimal_to_binary([decimal_numbers[0]])[0]
         ans = bin(int(binary_numbers[0], 2) + decimal_numbers[0]).replace("0b", '')
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -210,6 +223,7 @@ def binary_addition(binary_numbers, decimal_numbers = None):
         op0 = decimal_to_binary([decimal_numbers[0]])[0]
         op1 = decimal_to_binary([decimal_numbers[1]])[0]
         ans = decimal_to_binary([decimal_numbers[0] + decimal_numbers[1]])[0]
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -239,6 +253,7 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         op0 = binary_numbers[0]
         op1 = binary_numbers[1]
         ans = bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -264,6 +279,7 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         op0 = binary_numbers[0]
         op1 = decimal_to_binary([decimal_numbers[0]])[0]
         ans = bin(int(binary_numbers[0], 2) - decimal_numbers[0]).replace("0b", '')
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -281,6 +297,7 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         op0 = decimal_to_binary([decimal_numbers[0]])[0]
         op1 = decimal_to_binary([decimal_numbers[1]])[0]
         ans = decimal_to_binary([decimal_numbers[0] - decimal_numbers[1]])[0]
+        ans = ans.zfill(required_bits)
         op0len = op0.__len__() 
         op1len = op1.__len__()
         anslen = ans.__len__()
@@ -305,12 +322,24 @@ def binary_subtraction(binary_numbers, decimal_numbers = None):
         return ["Error! 2 args required, given 1.", ""]
 
 def binary_module(query):
+    global required_bits
+    isuserbit = False
     tokenize = nltk.word_tokenize(query)
     print(tokenize)
-
+    for word in tokenize:
+        bitindex = word.find("bit")
+        bitindex1 = word.find("bits")
+        if(bitindex > -1 and bitindex1 < 0):
+            if(bitindex > 0):
+                isuserbit = True
+            user_bit= int(word[:bitindex])
+            if(user_bit > required_bits):
+                required_bits = user_bit
+    if(isuserbit == False):
+        required_bits=0
     kwd = [x for x in tokenize if x in keyword_list] # get common keywords
     print(kwd) 
-
+          
     binar_numbers = []
     decimal_numbers = []
 
@@ -318,33 +347,46 @@ def binary_module(query):
     for i in tokenize:
         if re.match(r'[0-9]', i): 
             if check_binary_format(i) == "yes" and "base10" not in query and "base ten" not in query:
-                binar_numbers.append(i)
+                if(i.find("bit") < 0 ):
+                    if (len(i) < required_bits):
+                        i.zfill(required_bits)
+                    else:
+                        i.zfill(len(i) + 1)
+                    binar_numbers.append(i)
             else:
-                decimal_numbers.append(int(i))
+                if(i.find("bit") < 0 ):
+                    decimal_numbers.append(int(i))
             
     # print(binar_numbers, decimal_numbers)
 
     try:
         if (('one' in kwd or 'ones' in kwd or "one's" in kwd) or ('two' not in kwd and 'twos' not in kwd and "two's" not in kwd)) and ('compliment' in kwd or 'complement' in kwd):
+            print("ones_compliment called")
             return one_compliment(binar_numbers, decimal_numbers)
     
         elif ('two' in kwd or 'twos' in kwd or "two's" in kwd) and ('compliment' in kwd or 'complement' in kwd):
+            print("twos_compliment called")
             return twos_compliment(binar_numbers, decimal_numbers)
 
         elif 'bits' in kwd: 
+            print("bit_representation called")
             return bit_representation(decimal_numbers)
 
         elif 'sum' in kwd or '+' in kwd:
+            print("binary_addition called")
             return binary_addition(binar_numbers, decimal_numbers)
-        
+
         elif 'difference' in kwd or '-' in kwd:
+            print("binary_subtraction called")
             return binary_subtraction(binar_numbers, decimal_numbers)
 
         elif 'convert' in kwd or 'write' in kwd or 'represent':
             if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
+                print("binary_to_decimal called")
                 return binary_to_decimal(binar_numbers, decimal_numbers)
-
             elif "to binary" in query or "decimal to binary" in query or 'binary' in query:
+                print("decimal_to_binary called")
+
                 return decimal_to_binary(decimal_numbers)
         else:
             return ["query format not correct, please repeat the question again.", ""]
