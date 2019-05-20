@@ -321,8 +321,10 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         else:
             if(i[1] == "int"):
                 print("+ int  no complement")
-                bin_rep = decimal_to_binary([i[1]])
+                bin_rep = decimal_to_binary([i[0]])
+                print("bin_rep ", bin_rep)
                 bin_rep[0] = bin_rep[0].zfill(i[3])
+                print("bin_rep[0] ", bin_rep[0])
                 result.append([bin_rep[0], bin_rep[1],"int", str(i[1])])
             else:
                 i[0] = i[0].zfill(i[3])
@@ -370,9 +372,9 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
     if(isDoubleNeg):
         steps = steps + "Double negation results in addition i.e. - -" + str(all_numbers[1][0]) + " ==> + " + str(all_numbers[1][0]) + "<br/>"
         if(all_numbers[1][2] == "-"):
-            steps = steps + "so it is: " + str(all_numbers[1][2]) + str(all_numbers[1][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
+            steps = steps + "so it is: " + str(all_numbers[0][2]) + str(all_numbers[0][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
         else:
-            steps = steps + "so it is: " + str(all_numbers[1][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
+            steps = steps + "so it is: " + str(all_numbers[0][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
     print("2 Steps " , steps)
     print(all_numbers[1])
     print(binaries)
