@@ -3,7 +3,8 @@ import re, math, json
 nltk.download('punkt')
 required_bits= 4
 default_bits = 0
-isSigned = 1
+isSignednumber = False
+userbits = 0
 keyword_list = [
     'write', 'one', 'two','ones',
     'twos', 'binary', 
@@ -172,157 +173,240 @@ def bit_representation(decimal_numbers):
     else: 
         return ['Error! 1 arg required, given 0', ""]
 
-def binary_addition(binary_numbers, decimal_numbers = None):
-    if len(binary_numbers) == 2:
-        op0 = binary_numbers[0]
-        op1 = binary_numbers[1]
-        ans = bin(int(binary_numbers[0], 2) + int(binary_numbers[1], 2)).replace("0b", '')
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
-        else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-
-        return [ans, 
-                'Starting from LSB (assumming both arguments to be in base 2), add the bits of each '\
-                'argument.<br/ >if the sum is equal to 10 (2 in decimal), then add the carry in next<br />'\
-                'bit of 1st argument and place 0 in the final answer.<br />If the sum of bits from both '\
-                'arguments is 11 (3 in decimal) then place 1 in the final result and add 1 in the next bit of<br />'\
-                'the first argument. Keep repeating these steps untill MSB is reached.'\
-                '<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans
-                ]
- 
-    elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        op0 = binary_numbers[0]
-        op1 = decimal_to_binary([decimal_numbers[0]])[0]
-        ans = bin(int(binary_numbers[0], 2) + decimal_numbers[0]).replace("0b", '')
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
-        else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-        return ["Base 2 ( " + ans + " ) , Base 10 ( " + str(int(binary_numbers[0], 2) + decimal_numbers[0]) + ' )', '<br /> Step 1: convert the decimal number in to binary <br/> Step 2: apply binary addition on the operands <br/> Step 3: convert the answer in decimal because the result is to be displaced in decimal.<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans]
-
-    elif len(decimal_numbers) == 2:
-        op0 = decimal_to_binary([decimal_numbers[0]])[0]
-        op1 = decimal_to_binary([decimal_numbers[1]])[0]
-        ans = decimal_to_binary([decimal_numbers[0] + decimal_numbers[1]])[0]
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
-        else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-
-        steps= "Step 1: Convert the input decimal numbers into binary.<br />"
-        steps = steps + "Step 2: Line up the converted binary digits horizontally for both binary numbers so that all binary points for both numbers lie on a horizontal line.<br />"
-        steps = steps + "Step 3: Perform the binary subtraction operation on the numbers bit by bit.<br />"
-        steps = steps + "Step 4: The answer in binary is shown below whereas the answer in decimal is on the main screen.<br />"
-        steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
-
-        return [str(decimal_numbers[0] + decimal_numbers[1]), steps]
-
+def getBinTwosComplement(num, reqBit):
+    steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
+    print("num before: ", num)
+    num = num.zfill(reqBit)
+    if(userbits > num.__len__()+1):
+        num = num.zfill(userbits)
     else:
-        return ["Error! 2 args required, given 1.", ""]
+        num = num.zfill(num.__len__()+1)
+    print("num after: ", num)
+    a = num
+    print("a " , a)
+    temp = ""
+    for i in range(0, len(a)):
+        if a[i] == '0':
+            temp = temp + '1'
+        else: 
+            temp = temp + '0'
+    print("temp " , temp)
+    print("compliment: ", temp)
+    bitlen = temp.__len__()
+    answer = str(bin(int(temp, base = 2) + 1).replace('0b', ''))
+    print("answer: ", answer[0])
+    answer = answer.zfill(bitlen)
+    answer = answer.zfill(required_bits)
+    return [answer , steps ,"bin"]
 
-def binary_subtraction(binary_numbers, decimal_numbers = None):
-    if len(binary_numbers) == 2:
-        op0 = binary_numbers[0]
-        op1 = binary_numbers[1]
-        ans = bin(int(binary_numbers[0], 2) - int(binary_numbers[1], 2)).replace("0b", '')
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
+def getIntTwosComplement(num, reqBit):
+    print("getIntTwosComplement")
+    global userbits
+    print("num " , num)
+    print("reqBit " , reqBit)
+    temp = bin(num).replace("0b", "")
+    temp=temp.zfill(reqBit)
+    print("temp " , temp)
+    print("temp len " , len(temp))
+    print("temp type " , type(temp))
+    a = temp
+    print("a " , a)
+    print("len(a) " , len(a))
+    temp = ""
+    for i in range(0, len(a)):
+        if a[i] == '0':
+            temp = temp + '1'
+        else: 
+            temp = temp + '0'
+    print("temp " , temp)
+    sum = int("0b" + temp, base = 2) + 1
+    print("sum ", sum)
+    result = decimal_to_binary([sum])
+    print("result ", result)
+    binary_res = result[0]
+    print("userbits " , userbits)
+    print("binary_res before: ", binary_res)
+    if(userbits > binary_res.__len__()+1):
+        binary_res = binary_res.zfill(userbits)
+    print("binary_res before: ", binary_res)    
+    steps = "First, convert decimal number into binary number.<br />"\
+        "To convert decimal number into binary, "
+    steps = steps + result[1] 
+    steps = steps + "<br /> Then, apply one's compliment to binary string and then add 1 to LSB (Least Significant Bit) to get its negative representation i.e. " + binary_res
+    steps = steps + binary_to_decimal([binary_res])[1]
+    return [binary_res, steps,"int", str(sum)]
+
+
+def getDecimal(num,isSigned):
+    print("num " ,  num)
+    numLen = num.__len__()
+    print("numLen " ,  numLen)
+    decimal_rep=""
+    if(isSigned):
+        if(num[0] == "0"):
+            print("decimal_rep " ,  str(int(num, base = 2)))
+            decimal_rep = str(int(num, base = 2))
         else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-
-        return [ans, 
-                'Binary subtraction is also similar to that of decimal subtraction with the difference that when<br />'\
-                "1 is subtracted from 0, it is necessary to borrow 1 from the next higher order bit<br />"\
-                'and that bit is reduced by 1 (or 1 is added to the next bit of subtrahend) and the remainder is 1<br />'\
-                '<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans
-                ]
-       
-
-    elif len(binary_numbers) == 1 and len(decimal_numbers) == 1:
-        op0 = binary_numbers[0]
-        op1 = decimal_to_binary([decimal_numbers[0]])[0]
-        ans = bin(int(binary_numbers[0], 2) - decimal_numbers[0]).replace("0b", '')
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
-        else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-        return ["Base 2 ( " + ans + " ) , Base 10 ( " + str(int(binary_numbers[0], 2) - decimal_numbers[0]) + ' )', '<br /> Step 1: convert the decimal number in to binary <br/> Step 2: apply binary subtraction on the operands <br/> Step 3: convert the answer in decimal because the result is to be displaced in decimal.<br />'+ op0 + "<br/><u>" + op1 + '</u><br/>' + ans]    
-    elif len(decimal_numbers) == 2:
-        op0 = decimal_to_binary([decimal_numbers[0]])[0]
-        op1 = decimal_to_binary([decimal_numbers[1]])[0]
-        ans = decimal_to_binary([decimal_numbers[0] - decimal_numbers[1]])[0]
-        ans = ans.zfill(required_bits)
-        op0len = op0.__len__() 
-        op1len = op1.__len__()
-        anslen = ans.__len__()
-        if(op0len > op1len):
-            op1 = op1.zfill(op0len)
-            ans = ans.zfill(op0len)
-        else:
-            op0 = op0.zfill(op1len)
-            ans = ans.zfill(op1len)
-        if(anslen > op0len or anslen > op1len):
-            op0 = op0.zfill(anslen)
-            op1 = op1.zfill(anslen)
-        
-        steps= "Step 1: Convert the input decimal numbers into binary.<br />"
-        steps = steps + "Step 2: Line up the converted binary digits horizontally for both binary numbers so that all binary points for both numbers lie on a horizontal line.<br />"
-        steps = steps + "Step 3: Perform the binary subtraction operation on the numbers bit by bit.<br />"
-        steps = steps + "Step 4: The answer in binary is shown below whereas the answer in decimal is on the main screen.<br />"
-        steps = steps + op0 + "<br/><u>" + op1 + '</u><br/>' + ans
-        return [str(decimal_numbers[0] -  decimal_numbers[1]), steps]
-
+            num1 = ""
+            num1 = num1.zfill(numLen) 
+            print("num1 " ,  num1)
+            num1 = '1' + num1[1:]
+            print("num1 " ,  num1)
+            dec1 = int(num1, base = 2) * -1
+            print("dec1 " ,  dec1)
+            num = '0' + num[1:]
+            print("num " ,  num)
+            dec = int(num, base = 2)
+            print("dec " ,  dec)
+            decimal_rep = str(dec1 + dec)
     else:
-        return ["Error! 2 args required, given 1.", ""]
+        print("decimal_rep " ,  str(int(num, base = 2)))
+        decimal_rep = str(int(num, base = 2))
+    print("decimal_rep " ,  decimal_rep)
+
+    return decimal_rep
+
+
+def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
+    isDoubleNeg = False
+    global isSignednumber
+    if(all_numbers[1][2]=="-"):
+        isSignednumber = True
+    result = []
+    print("op_type ", op_type)
+    print("all_numbers[1][2] ", all_numbers[1][2])
+    if(op_type == "subtraction"):
+        if(all_numbers.__len__() > 1):
+            if(all_numbers[1][2]=="-"):
+                isDoubleNeg = True
+                op_type = "addition"
+                all_numbers[1][2] = "+"
+            else:
+                op_type = "addition"
+                all_numbers[1][2] = "-"
+    if(all_numbers[1][2]=="-" or all_numbers[0][2]=="-"):
+        isSignednumber = True
+    print(all_numbers)
+    binaries=[]
+    for i in all_numbers:
+        if(i[2] == "-"):
+            if(i[1] == "int"):
+                bin_rep = decimal_to_binary([i[0]])
+                i.append(bin_rep[0].__len__()+1)
+                binaries.append(bin_rep[0])
+            else:
+                i.append(i[0].__len__()+1)
+                binaries.append(i[0])
+        else:
+            if(i[1] == "int"):
+                bin_rep = decimal_to_binary([i[0]])
+                i.append(bin_rep[0].__len__())
+                binaries.append(bin_rep[0])
+            else:
+                i.append(i[0].__len__())
+                binaries.append(i[0])
+    if(all_numbers[0][3] < all_numbers[1][3]):
+        all_numbers[0][3] = all_numbers[1][3]
+    else:
+        all_numbers[1][3] = all_numbers[0][3]
+    print(all_numbers)
+    for i in all_numbers:
+        if(i[2] == "-"):
+            if(i[1] == "int"):
+                print("- int  getIntTwosComplement")
+                result.append(getIntTwosComplement(i[0],i[3]))
+            else:
+                print("- bin  getBinTwosComplement")
+                result.append(getBinTwosComplement(i[0],i[3]))
+        else:
+            if(i[1] == "int"):
+                print("+ int  no complement")
+                bin_rep = decimal_to_binary([i[1]])
+                bin_rep[0] = bin_rep[0].zfill(i[3])
+                result.append([bin_rep[0], bin_rep[1],"int", str(i[1])])
+            else:
+                i[0] = i[0].zfill(i[3])
+                print("+ bin  no complement")
+                result.append([i[0] , "" ,"bin"])
+    print("result ",result)
+    op0 = result[0][0]
+    op1 = result[1][0]
+    print("op0 " , op0)
+    print("op1 " , op1)
+    op0len = op0.__len__() 
+    op1len = op1.__len__()
+    if(op0len > op1len):
+        op1 = op1.zfill(op0len)
+    else:
+        op0 = op0.zfill(op1len)
+    print("op0 " , op0)
+    print("op1 " , op1)
+    ans = bin(int(op0, 2) + int(op1, 2)).replace("0b", '')
+    print("ans " , ans)
+    op0len = op0.__len__() 
+    op1len = op1.__len__()
+    anslen = ans.__len__()
+    isCarry = False
+    isDecimal = False
+    dec_value = ""
+    if(isSignednumber):
+        if(anslen > op1len):
+            ans = ans[1:]
+            isCarry = True
+    final_ans= ""
+    if(all_numbers[0][1] =="int" or all_numbers[1][1]=="int"):
+        isDecimal = True
+    print("isDecimal", isDecimal)
+    steps="Steps:<br/>"
+    if(all_numbers[0][1]=="int"):
+        if(all_numbers[0][2] == "-"):
+            steps = steps + "Convert to binary: -" + str(all_numbers[0][0]) + " ==> -" + str(binaries[0]) + "<br/>"
+        else:
+            steps = steps + "Convert to binary: " + str(all_numbers[0][0]) + " ==> " + str(binaries[0]) + "<br/>"
+        if(all_numbers[0][2] =="-"):
+            steps = steps + "Take two's compliment of negative number to get his binary representation: <br/> "
+            steps = steps + str(binaries[0]) + " ==> " + result[0][0] + "<br/>"
+    print("1 Steps " , steps)
+    if(isDoubleNeg):
+        steps = steps + "Double negation results in addition i.e. - -" + str(all_numbers[1][0]) + " ==> + " + str(all_numbers[1][0]) + "<br/>"
+        if(all_numbers[1][2] == "-"):
+            steps = steps + "so it is: " + str(all_numbers[1][2]) + str(all_numbers[1][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
+        else:
+            steps = steps + "so it is: " + str(all_numbers[1][0]) + " + " + str(all_numbers[1][0]) + "<br/>"
+    print("2 Steps " , steps)
+    print(all_numbers[1])
+    print(binaries)
+    if(all_numbers[1][1]=="int"):
+        if(all_numbers[0][2] == "-"):
+            steps = steps + "Convert to binary: -" + str(all_numbers[1][0]) + " ==> -" + str(binaries[1]) + "<br/>"
+        else:
+            steps = steps + "Convert to binary: " + str(all_numbers[1][0]) + " ==> " + str(binaries[1]) + "<br/>"
+        print("steps 2a " , steps)
+        if(all_numbers[1][2] =="-"):
+            steps = steps + "Take two's compliment of negative number to get his binary representation: <br/> "
+            print("steps 2b " , steps)
+            steps = steps + str(binaries[1]) + " ==> " + result[1][0] + "<br/>"
+    print("3 Steps " , steps)
+    steps = steps + "Adding numbers: <br/>"
+    if(isCarry):
+        steps = steps +  str(op0) + "<br/>"
+        steps = steps +  str(op1) + "<br/>"
+        steps = steps +  str(ans) + " Carry 1 discarded if it exceeds bits.<br/>"
+    else:
+        steps = steps +  str(op0) + "<br/>"
+        steps = steps +  str(op1) + "<br/>"
+        steps = steps +  str(ans) + "<br/>"
+    if(isDecimal):
+        dec_value = getDecimal(ans,isSignednumber)
+    print("dec_value " , dec_value)
+    
+    
+    return [ans, steps]
 
 def binary_module(query):
     global required_bits
+    global userbits
+
     isuserbit = False
     tokenize = nltk.word_tokenize(query)
     print(tokenize)
@@ -333,6 +417,7 @@ def binary_module(query):
             if(bitindex > 0):
                 isuserbit = True
             user_bit= int(word[:bitindex])
+            userbits= user_bit
             if(user_bit > required_bits):
                 required_bits = user_bit
     if(isuserbit == False):
@@ -341,21 +426,41 @@ def binary_module(query):
     print(kwd) 
           
     binar_numbers = []
+    binar_signed =[]
     decimal_numbers = []
-
+    decimal_signed =[]
+    all_numbers=[]
     # isolate decimal and binary number arguments. 
     for i in tokenize:
+        isSigned = False
+
+        if i[0]== '-':
+            isSigned = True
+            i = i[1:]
         if re.match(r'[0-9]', i): 
+            print("number: " , i)
             if check_binary_format(i) == "yes" and "base10" not in query and "base ten" not in query:
+                print("binary: " , i)
                 if(i.find("bit") < 0 ):
-                    if (len(i) < required_bits):
+                    if ((len(i) < required_bits) and ('sum' not in kwd and '+'  not in kwd and "difference" not in kwd and "-" not in kwd)):
                         i.zfill(required_bits)
-                    else:
-                        i.zfill(len(i) + 1)
                     binar_numbers.append(i)
+                    binar_signed.append(isSigned)
+                    if(isSigned):
+                        all_numbers.append([i,"bin","-"])
+                    else:
+                        all_numbers.append([i,"bin","+"])
+
             else:
+                print("decimal: " , i)
                 if(i.find("bit") < 0 ):
                     decimal_numbers.append(int(i))
+                    decimal_signed.append(isSigned)
+                    if(isSigned):
+                        all_numbers.append([int(i),"int","-"])
+                    else:
+                        all_numbers.append([int(i),"int","+"])
+    print(all_numbers)
             
     # print(binar_numbers, decimal_numbers)
 
@@ -374,11 +479,10 @@ def binary_module(query):
 
         elif 'sum' in kwd or '+' in kwd:
             print("binary_addition called")
-            return binary_addition(binar_numbers, decimal_numbers)
-
+            return binary_add_sub("addition",all_numbers,binar_numbers,decimal_numbers)
         elif 'difference' in kwd or '-' in kwd:
             print("binary_subtraction called")
-            return binary_subtraction(binar_numbers, decimal_numbers)
+            return binary_add_sub("subtraction",all_numbers,binar_numbers,decimal_numbers)
 
         elif 'convert' in kwd or 'write' in kwd or 'represent':
             if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
@@ -386,7 +490,6 @@ def binary_module(query):
                 return binary_to_decimal(binar_numbers, decimal_numbers)
             elif "to binary" in query or "decimal to binary" in query or 'binary' in query:
                 print("decimal_to_binary called")
-
                 return decimal_to_binary(decimal_numbers)
         else:
             return ["query format not correct, please repeat the question again.", ""]
