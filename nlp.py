@@ -84,6 +84,51 @@ def decimal_to_binary(decimal_numbers):
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
 
+def signed_decimal_to_binary(decimal_numbers, all_numbers):
+    global required_bits
+    i = all_numbers[0]
+    result = []
+    steps = "For Negative number: First convert the number to its binary and than take its two's compliment.<br/>"
+    if len(decimal_numbers) == 1:
+        steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
+        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
+        steps = steps + ' For this example, <br /> <b>'
+        num = decimal_numbers[0]
+        if(num > 0):
+            count = 0
+            carry = 0
+            bits = math.ceil(math.log(int(num), 2))
+            while (count < bits):
+                steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+                carry = num % 2
+                num = num / 2
+                steps = steps + ', carry = ' + str(int(carry)) + '<br />'
+                count = count + 1
+            steps = steps + "<b/> <br/>"
+        answer = str(bin(decimal_numbers[0]).replace("0b", ""))
+        anslen = len(answer) + 1
+        r_bit = anslen
+        print("r_bit" , r_bit)
+        if(anslen < required_bits):
+            r_bit = required_bits
+            answer = answer.zfill(required_bits)
+        else:
+            answer = answer.zfill(anslen)
+        steps = steps + "Now take twos compliment of " + answer + "<br/>"
+        result.append(getBinTwosComplement(answer,r_bit))
+        steps = steps + result[0][1]
+        steps = steps + answer + " ==> " + result[0][0]        
+        print("STEPS " , steps)
+        print("1 answer " , answer)
+        answer = result[0][0]
+        print("2 answer " , answer)
+        
+
+    else: 
+        return ["Error! 1 argument required, given 0 or more than 1", ""]
+    return [answer, steps]
+
+
 def one_compliment(x, y = None):
     if len(x) == 1:
         a = x[0]
@@ -537,7 +582,10 @@ def binary_module(query):
             if "to decimal" in query or "binary to decimal" in query or 'decimal' in query: 
                 return binary_to_decimal(binar_numbers, decimal_numbers)
             elif "to binary" in query or "decimal to binary" in query or 'binary' in query:
-                return decimal_to_binary(decimal_numbers)
+                if(all_numbers[0][2] == "-"):
+                    return signed_decimal_to_binary(decimal_numbers,all_numbers)
+                else:
+                    return decimal_to_binary(decimal_numbers)
         else:
             return ["query format not correct, please repeat the question again.", ""]
 
