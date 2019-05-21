@@ -270,7 +270,6 @@ def decimal_to_binary(decimal_numbers):
 
 def signed_decimal_to_binary(decimal_numbers, all_numbers):
     global required_bits
-    i = all_numbers[0]
     result = []
     steps = "For Negative number: First convert the number to its binary and than take its two's compliment.<br/>"
     if len(decimal_numbers) == 1:
@@ -465,8 +464,6 @@ def getBinTwosComplement(num, reqBit):
     answer = str(bin(int(temp, base = 2) + 1).replace('0b', ''))
     if(len(answer) > reqBit):
         answer = answer[1:]
-    answer = answer.zfill(bitlen)
-    answer = answer.zfill(required_bits)
     return [answer , steps ,"bin"]
 
 def getIntTwosComplement(num, reqBit):
@@ -523,9 +520,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
     global isSignednumber
     two_comp = 0
     isSignednumber = False
-    if(all_numbers[1][2]=="-"):
-        print("isSignednumber 1")
-        isSignednumber = True
     result = []
     if(op_type == "subtraction"):
         if(all_numbers.__len__() > 1):
@@ -590,7 +584,7 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             else:
                 i[0] = i[0].zfill(i[3])
                 result.append([i[0] , "" ,"bin"])
-    
+
     op0 = result[0][0]
     op1 = result[1][0]
     op0len = op0.__len__() 
@@ -603,6 +597,7 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
     op0len = op0.__len__() 
     op1len = op1.__len__()
     anslen = ans.__len__()
+    ans = ans.zfill(op1len)
     isCarry = False
     isDecimal = False
     dec_value = ""
@@ -620,7 +615,12 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             steps = steps + "Operand 1 : Convert to binary: " + str(all_numbers[0][0]) + " ==> " + str(binaries[0]) + "<br/>"
         if(all_numbers[0][2] =="-"):
             steps = steps + "Take two's compliment of negative number to get his binary representation: <br/> "
-            steps = steps + str(binaries[0]) + " ==> " + result[0][0] + "<br/>"
+            steps = steps + str(binaries[0]).zfill(len(result[0][0])) + " ==> " + result[0][0] + "<br/>"
+    else:
+        if(all_numbers[0][2] == "-"):
+            steps = steps + "Operand 2 : Base 2( -" + str(all_numbers[0][0]) + " )<br/>"
+        else:
+            steps = steps + "Operand 2 : Base 2( " + str(all_numbers[0][0]) + " )<br/>"
     if(isDoubleNeg):
         steps = steps + "Double negation results in addition i.e. - -" + str(all_numbers[1][0]) + " ==> + " + str(all_numbers[1][0]) + "<br/>"
         if(all_numbers[1][2] == "-"):
@@ -634,26 +634,42 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             steps = steps + "Operand 2 : Convert to binary: " + str(all_numbers[1][0]) + " ==> " + str(binaries[1]) + "<br/>"
         if(all_numbers[1][2] =="-"):
             steps = steps + "Take two's compliment of negative number to get his binary representation: <br/> "
-            steps = steps + str(binaries[1]) + " ==> " + result[1][0] + "<br/>"
+            steps = steps + str(binaries[1]).zfill(len(result[1][0])) + " ==> " + result[1][0] + "<br/>"
+    else:
+        if(all_numbers[1][2] == "-"):
+            steps = steps + "Operand 2 : Base 2( -" + str(all_numbers[1][0]) + " )<br/>"
+        else:
+            steps = steps + "Operand 2 : Base 2( " + str(all_numbers[1][0]) + " )<br/>"
     steps = steps + "Adding numbers: <br/>"
     print("1 issigned " , isSignednumber )
     if(isSignednumber):
         steps = steps + "0" + str(op0) + "<br/>"
         steps = steps +  "0" + str(op1) + "<br/>"
-        steps = steps +  str(ans) + "<br/>"
+        steps = steps +  str(ans).zfill(len(op0)+1)  + "<br/>"
+        ans = str(ans).zfill(len(op0)+1)
         temp_ans = ans[1:]
-        
+        carry = ans[0]
         if (two_comp == 1):
             steps = steps + "As there was only one negative operand, we are discarding the carry."
-            ans = temp_ans
+            ans = temp_ans.zfill(len(op0)+1)
         answer = 0 
         prev_steps = steps
         steps = "<br/>Converting the number to its decimal value: <br/>"
         next_step = "= "
         if(ans[0]=='1'):
-            answer = int(math.pow(2, len(ans)-1)) * -1 
-            steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
-            next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
+            if (two_comp == 1):
+                if(carry == '0'):
+                    answer = int(math.pow(2, len(ans)-1))
+                    steps = steps +" "+ ans + "=  ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+                    next_step = next_step  + str(int(math.pow(2, len(ans)-1)))
+                else:
+                    answer = int(math.pow(2, len(ans)-1)) * -1 
+                    steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+                    next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
+            else:
+                answer = int(math.pow(2, len(ans)-1)) * -1 
+                steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+                next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
         else:
             steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
             next_step = next_step + "- 0"
