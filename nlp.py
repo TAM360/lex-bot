@@ -157,13 +157,15 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
     else:
         return ["Error! 1 argumnent required, given 0.", ""]
 
-def bit_representation(decimal_numbers):
-
+def bit_representation(decimal_numbers,all_numbers):
     if len(decimal_numbers) == 1:    
-        steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + ") = " + str(math.log(decimal_numbers[0], 2)) 
-        steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0], 2)) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0], 2)))         
+        steps = "Take log base 2 of the given binary string i.e log<sub>2</sub>(" + str(decimal_numbers[0]) + " + 1) = " + str(math.log(decimal_numbers[0]+1, 2)) 
+        steps = steps + "<br />take ceiling of the previous result like this: &lceil;" + str(math.log(decimal_numbers[0] + 1, 2) ) + "&rceil; = " + str(math.ceil(math.log(decimal_numbers[0] + 1, 2 )))         
+        answer = str(math.ceil(math.log(decimal_numbers[0] + 1, 2)))
+        if(all_numbers[0][2] == "-"):
+            steps = steps + "<br/>Since its a negative number: there is atleast 1 extra bit needed to represent it. So answer: " + str(math.ceil(math.log(decimal_numbers[0] + 1, 2)) + 1)
+            answer = str(int(answer) + 1)
         steps = steps + "<br /> <b>Note: The answer has to be a integer, so we round up to the nearest biggest integer.</b>"
-        answer = str(math.ceil(math.log(decimal_numbers[0], 2)))
         return [answer, steps]
     
     else: 
@@ -524,7 +526,7 @@ def binary_module(query):
             return twos_compliment(binar_numbers, decimal_numbers)
 
         elif 'bits' in kwd: 
-            return bit_representation(decimal_numbers)
+            return bit_representation(decimal_numbers,all_numbers)
 
         elif 'sum' in kwd or '+' in kwd:
             return binary_add_sub("addition",all_numbers,binar_numbers,decimal_numbers)
