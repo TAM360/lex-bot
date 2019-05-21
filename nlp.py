@@ -56,6 +56,85 @@ def binary_to_decimal(binary_numbers, decimal_numbers =None):
     else: 
         return ['Error! 1 argument required, given 0 or more than 1', ""]
 
+def signed_ones_complement(decimal_numbers, all_numbers):
+    global required_bits
+    i = all_numbers[0]
+    result = []
+    steps = "For Negative number: First convert the number to its binary and than take its two's compliment. Then takes one's compliment.<br/>"
+    if len(all_numbers) == 1:
+        steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
+        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
+        steps = steps + ' For this example, <br /> <b>'
+        num = all_numbers[0][0]
+        if(num > 0):
+            count = 0
+            carry = 0
+            bits = math.ceil(math.log(int(num), 2))
+            while (count < bits):
+                steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+                carry = num % 2
+                num = num / 2
+                steps = steps + ', carry = ' + str(int(carry)) + '<br />'
+                count = count + 1
+            steps = steps + "<b/> <br/>"
+        answer = str(bin(all_numbers[0][0]).replace("0b", ""))
+        anslen = len(answer) + 1
+        
+        r_bit = anslen
+        if(anslen < required_bits):
+            r_bit = required_bits
+            answer = answer.zfill(required_bits)
+        else:
+            answer = answer.zfill(anslen)
+        steps = steps + "Now take twos compliment of " + answer + "<br/>"
+        result.append(getBinTwosComplement(answer,r_bit))
+        steps = steps + result[0][1]
+        steps = steps + answer + " ==> " + result[0][0]   
+        steps = steps + "<br/>Now take one's complement for final answer: "
+        answer = result[0][0]
+        a = answer
+        temp = ""
+        for i in range(0, len(a)):
+            if a[i] == '0':
+                temp = temp + '1'
+            else: 
+                temp = temp + '0'
+        steps = steps + "<br/> invert every bit of the given bit string i.e change 0 to 1 and 1 to 0 : <br />" + a + " ==> " +  temp 
+        steps = steps + "<br/> Convert decimal to binary"
+        answer = temp
+        ans = answer
+        steps = steps + ""
+        next_step = "= "
+        if(ans[0]=='1'):
+            answer = int(math.pow(2, len(ans)-1)) * -1 
+            steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+            next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
+        else:
+            steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
+            next_step = next_step + "- 0"
+        index= len(ans) - 1 
+        index1= 1
+        while (index > 1):
+            steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) " 
+            if(ans[index1]=="1"):
+                answer = answer + int(math.pow(2, (index-1)) )
+                next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
+            else:
+                next_step = next_step + " + 0"
+            index1 = index1 + 1
+            index = index - 1
+        steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
+        if(ans[len(ans)-1] == "1"):
+            answer = answer + 1
+            next_step = next_step + " + 1<br/>"  
+        else:
+            next_step = next_step + " + 0<br/>"  
+        next_step = next_step + " = " + str(answer) + "<br/>" 
+        steps = steps + next_step
+        final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
+    else: 
+        return ["Error! 1 argument required, given 0 or more than 1", ""]
+    return [final_ans, steps]
 
 def decimal_to_binary(decimal_numbers):
 
@@ -122,7 +201,7 @@ def signed_decimal_to_binary(decimal_numbers, all_numbers):
         print("1 answer " , answer)
         answer = result[0][0]
         print("2 answer " , answer)
-        
+
 
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
@@ -130,6 +209,7 @@ def signed_decimal_to_binary(decimal_numbers, all_numbers):
 
 
 def one_compliment(x, y = None):
+    global required_bits
     if len(x) == 1:
         a = x[0]
         a = a.zfill(required_bits)
@@ -565,7 +645,10 @@ def binary_module(query):
 
     try:
         if (('one' in kwd or 'ones' in kwd or "one's" in kwd) or ('two' not in kwd and 'twos' not in kwd and "two's" not in kwd)) and ('compliment' in kwd or 'complement' in kwd):
-            return one_compliment(binar_numbers, decimal_numbers)
+            if(all_numbers[0][2] == "-"):
+                return signed_ones_complement(decimal_numbers, all_numbers)
+            else:
+                return one_compliment(binar_numbers, decimal_numbers)
     
         elif ('two' in kwd or 'twos' in kwd or "two's" in kwd) and ('compliment' in kwd or 'complement' in kwd):
             return twos_compliment(binar_numbers, decimal_numbers)
