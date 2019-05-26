@@ -60,26 +60,29 @@ def signed_ones_complement(decimal_numbers, all_numbers):
     global required_bits
     i = all_numbers[0]
     result = []
-    steps = "For Negative number: First convert the number to its binary and than take its two's compliment. Then takes one's compliment.<br/>"
+    answer = ""
+    steps = "For Negative number: First creates the number to its . Then takes one's compliment.<br/>"
     if len(all_numbers) == 1:
-        steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
-        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
-        steps = steps + ' For this example, <br /> <b>'
-        num = all_numbers[0][0]
-        if(num > 0):
-            count = 0
-            carry = 0
-            bits = math.ceil(math.log(int(num), 2))
-            while (count < bits):
-                steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
-                carry = num % 2
-                num = num / 2
-                steps = steps + ', carry = ' + str(int(carry)) + '<br />'
-                count = count + 1
-            steps = steps + "<b/> <br/>"
-        answer = str(bin(all_numbers[0][0]).replace("0b", ""))
+        if(all_numbers[0][1] == "int"):
+            steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
+            steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
+            steps = steps + ' For this example, <br /> <b>'
+            num = all_numbers[0][0]
+            if(num > 0):
+                count = 0
+                carry = 0
+                bits = math.ceil(math.log(int(num), 2))
+                while (count < bits):
+                    steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+                    carry = num % 2
+                    num = num / 2
+                    steps = steps + ', carry = ' + str(int(carry)) + '<br />'
+                    count = count + 1
+                steps = steps + "<b/> <br/>"
+            answer = str(bin(all_numbers[0][0]).replace("0b", ""))
+        else:
+            answer = str(all_numbers[0][0])
         anslen = len(answer) + 1
-        
         r_bit = anslen
         if(anslen < required_bits):
             r_bit = required_bits
@@ -100,38 +103,42 @@ def signed_ones_complement(decimal_numbers, all_numbers):
             else: 
                 temp = temp + '0'
         steps = steps + "<br/> invert every bit of the given bit string i.e change 0 to 1 and 1 to 0 : <br />" + a + " ==> " +  temp 
-        steps = steps + "<br/> Convert decimal to binary"
-        answer = temp
-        ans = answer
-        steps = steps + ""
-        next_step = "= "
-        if(ans[0]=='1'):
-            answer = int(math.pow(2, len(ans)-1)) * -1 
-            steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
-            next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
-        else:
-            steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
-            next_step = next_step + "- 0"
-        index= len(ans) - 1 
-        index1= 1
-        while (index > 1):
-            steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) " 
-            if(ans[index1]=="1"):
-                answer = answer + int(math.pow(2, (index-1)) )
-                next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
+        if(all_numbers[0][1] == "int"):
+            steps = steps + "<br/> Convert decimal to binary"
+            answer = temp
+            ans = answer
+            answer=0
+            steps = steps + ""
+            next_step = "= "
+            if(ans[0]=='1'):
+                answer = int(math.pow(2, len(ans)-1)) * -1 
+                steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+                next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
             else:
-                next_step = next_step + " + 0"
-            index1 = index1 + 1
-            index = index - 1
-        steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
-        if(ans[len(ans)-1] == "1"):
-            answer = answer + 1
-            next_step = next_step + " + 1<br/>"  
+                steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
+                next_step = next_step + "- 0"
+            index= len(ans) - 1 
+            index1= 1
+            while (index > 1):
+                steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) "
+                if(ans[index1]=="1"):
+                    answer = answer + int(math.pow(2, (index-1)) )
+                    next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
+                else:
+                    next_step = next_step + " + 0"
+                index1 = index1 + 1
+                index = index - 1
+            steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
+            if(ans[len(ans)-1] == "1"):
+                answer = answer + 1
+                next_step = next_step + " + 1<br/>"  
+            else:
+                next_step = next_step + " + 0<br/>"  
+            next_step = next_step + " = " + str(answer) + "<br/>" 
+            steps = steps + next_step
+            final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
         else:
-            next_step = next_step + " + 0<br/>"  
-        next_step = next_step + " = " + str(answer) + "<br/>" 
-        steps = steps + next_step
-        final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
+            final_ans = temp
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
     return [final_ans, steps]
@@ -140,40 +147,50 @@ def signed_twos_complement(decimal_numbers, all_numbers):
     global required_bits
     i = all_numbers[0]
     result = []
+    answer = ""
     steps = "For Negative number: First convert the number to its binary and than take its two's compliment. And the takes its two's complement again to get the required answer. <br/>"
     if len(all_numbers) == 1:
-        steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
-        steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
-        steps = steps + ' For this example, <br /> <b>'
-        num = all_numbers[0][0]
-        if(num > 0):
-            count = 0
-            carry = 0
-            bits = math.ceil(math.log(int(num), 2))
-            while (count < bits):
-                steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
-                carry = num % 2
-                num = num / 2
-                steps = steps + ', carry = ' + str(int(carry)) + '<br />'
-                count = count + 1
-            steps = steps + "<b/> <br/>"
-        answer = str(bin(all_numbers[0][0]).replace("0b", ""))
-        anslen = len(answer) + 1
-        
-        r_bit = anslen
-        if(anslen < required_bits):
-            r_bit = required_bits
-            answer = answer.zfill(required_bits)
+        if(all_numbers[0][1] == "int"):
+            steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
+            steps = steps + 'remainder becomes smaller than 2. Then read all the carry in backward(bottom to top) direction.<br />' 
+            steps = steps + ' For this example, <br /> <b>'
+            num = all_numbers[0][0]
+            if(num > 0):
+                count = 0
+                carry = 0
+                bits = math.ceil(math.log(int(num), 2))
+                while (count < bits):
+                    steps = steps + "Iteration # " + str(count) + ": " + "remainder = " + str(int(num/2))
+                    carry = num % 2
+                    num = num / 2
+                    steps = steps + ', carry = ' + str(int(carry)) + '<br />'
+                    count = count + 1
+                steps = steps + "<b/> <br/>"
+            answer = str(bin(all_numbers[0][0]).replace("0b", ""))
+            anslen = len(answer) + 1
+            
+            r_bit = anslen
+            if(anslen < required_bits):
+                r_bit = required_bits
+                answer = answer.zfill(required_bits)
+            else:
+                answer = answer.zfill(anslen)
         else:
-            answer = answer.zfill(anslen)
-        print("answer before 2's complement: ", answer)
-        steps = steps + "Now take twos compliment of " + answer + "<br/>"
+            answer = all_numbers[0][0]
+            anslen = len(answer) + 1
+            
+            r_bit = anslen
+            if(anslen < required_bits):
+                r_bit = required_bits
+                answer = answer.zfill(required_bits)
+            else:
+                answer = answer.zfill(anslen)
         result.append(getBinTwosComplement(answer,r_bit))
         steps = steps + result[0][1]
         result[0][0] = result[0][0][1:]
+        steps = steps + "Now take twos compliment of " + answer + " ==> " + result[0][0] +"<br/>"
         r_bit = len(result[0][0])
         steps = steps + answer + " ==> " + result[0][0]   
-        print("answer after 1st 2's complement: ", result[0][0])
         steps = steps + "<br/>Now take two's complement for final answer: <br/>"
         steps = steps + "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
         a = result[0][0]
@@ -184,59 +201,44 @@ def signed_twos_complement(decimal_numbers, all_numbers):
                 temp = temp + '1'
             else: 
                 temp = temp + '0'
-        print("answer after 2's complement + 1's complement: ", temp)
         answer = str(bin(int(temp, base = 2) + 1).replace('0b', '')).zfill(r_bit)
-        print("answer after 2's complement + 2's complement: ", answer)
         if(len(answer) > reqBit):
             answer = answer[1:]
-        print("answer after 2's complement + 2's complement remove carry: ", answer)
-        steps = steps + "<br/> Convert decimal to binary<br/>"
-        ans = answer
-        print("ans " , ans)
-        steps = steps + ""
-        next_step = "= "
-        answer = 0
-        if(ans[0]=='1'):
-            answer = int(math.pow(2, len(ans)-1)) * -1 
-            steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
-            next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
-        else:
-            steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
-            next_step = next_step + "- 0"
-        index= len(ans) - 1 
-        index1= 1
-        print("a steps " , steps)
-        while (index > 1):
-            print( index, " " ,  index1, " ", "+ ( 2^" , str(index-1) , " * " , ans[index1]," ) " )
-            steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) " 
-            print("A")
-            if(ans[index1]=="1"):
-                print("B ", answer)
-                answer = answer + int(math.pow(2, (index-1)) )
-                print("C")
-                next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
-                print("D")
+        if(all_numbers[0][1] == "int"):
+            steps = steps + "<br/> Convert decimal to binary<br/>"
+            ans = answer
+            steps = steps + ""
+            next_step = "= "
+            answer = 0
+            if(ans[0]=='1'):
+                answer = int(math.pow(2, len(ans)-1)) * -1 
+                steps = steps +" "+ ans + "= - ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) " 
+                next_step = next_step + "- " + str(int(math.pow(2, len(ans)-1)))
             else:
-                print("E")
-                next_step = next_step + " + 0"
-            print("F")
-            index1 = index1 + 1
-            print("G")
-            index = index - 1
-            print("H")
-        print("ba steps " , steps)
-        steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
-        if(ans[len(ans)-1] == "1"):
-            answer = answer + 1
-            next_step = next_step + " + 1<br/>"  
+                steps = steps + "- ( 2^" + str(len(ans)-1) + " * " + ans[0]+" ) "
+                next_step = next_step + "- 0"
+            index= len(ans) - 1 
+            index1= 1
+            while (index > 1):
+                steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) " 
+                if(ans[index1]=="1"):
+                    answer = answer + int(math.pow(2, (index-1)) )
+                    next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
+                else:
+                    next_step = next_step + " + 0"
+                index1 = index1 + 1
+                index = index - 1
+            steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
+            if(ans[len(ans)-1] == "1"):
+                answer = answer + 1
+                next_step = next_step + " + 1<br/>"  
+            else:
+                next_step = next_step + " + 0<br/>"  
+            next_step = next_step + " = " + str(answer) + "<br/>" 
+            steps = steps + next_step
+            final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
         else:
-            next_step = next_step + " + 0<br/>"  
-        next_step = next_step + " = " + str(answer) + "<br/>" 
-        print("c steps " , steps)
-        steps = steps + next_step
-        print("FINALS STEPS ", steps)
-        final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
-        print("final_ans ", final_ans)
+            final_ans = answer
     else: 
         return ["Error! 1 argument required, given 0 or more than 1", ""]
     return [final_ans, steps]
@@ -291,7 +293,6 @@ def signed_decimal_to_binary(decimal_numbers, all_numbers):
         answer = str(bin(decimal_numbers[0]).replace("0b", ""))
         anslen = len(answer) + 1
         r_bit = anslen
-        print("r_bit" , r_bit)
         if(anslen < required_bits):
             r_bit = required_bits
             answer = answer.zfill(required_bits)
@@ -301,10 +302,7 @@ def signed_decimal_to_binary(decimal_numbers, all_numbers):
         result.append(getBinTwosComplement(answer,r_bit))
         steps = steps + result[0][1]
         steps = steps + answer + " ==> " + result[0][0]        
-        print("STEPS " , steps)
-        print("1 answer " , answer)
         answer = result[0][0]
-        print("2 answer " , answer)
 
 
     else: 
@@ -380,7 +378,6 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         steps = steps + "<br /> Finally, convert the result back to decimal format. For this,"\
             " follow the following steps: <br />"
         ans = result[0] 
-        print("ans " , ans)
         next_step = "= "
         answer = 0
         if(ans[0]=='1'):
@@ -392,26 +389,15 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
             next_step = next_step + "- 0"
         index= len(ans) - 1 
         index1= 1
-        print("a steps " , steps)
         while (index > 1):
-            print( index, " " ,  index1, " ", "+ ( 2^" , str(index-1) , " * " , ans[index1]," ) " )
             steps = steps + "+ ( 2^" + str(index-1) + " * " + ans[index1]+" ) " 
-            print("A")
             if(ans[index1]=="1"):
-                print("B ", answer)
                 answer = answer + int(math.pow(2, (index-1)) )
-                print("C")
                 next_step = next_step + " +  " + str(int(math.pow(2, (index-1) )))
-                print("D")
             else:
-                print("E")
                 next_step = next_step + " + 0"
-            print("F")
             index1 = index1 + 1
-            print("G")
             index = index - 1
-            print("H")
-        print("ba steps " , steps)
         steps = steps + "+ ( 2^0"  + " * " + ans[len(ans)-1]+" )<br/>" 
         if(ans[len(ans)-1] == "1"):
             answer = answer + 1
@@ -419,9 +405,7 @@ def twos_compliment(binary_numbers, decimal_numbers = None):
         else:
             next_step = next_step + " + 0<br/>"  
         next_step = next_step + " = " + str(answer) + "<br/>" 
-        print("c steps " , steps)
         steps = steps + next_step
-        print("FINALS STEPS ", steps)
         final_ans = "Base 2 ( " + ans + " ), Base 10 ( " + str(answer) + ")" 
 
         #steps = steps + binary_to_decimal([result[0]])[1]
@@ -530,9 +514,7 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             else:
                 op_type = "addition"
                 all_numbers[1][2] = "-"
-    print(all_numbers)
     if(all_numbers[1][2]=="-" or all_numbers[0][2]=="-"):
-        print("isSignednumber 2")
         isSignednumber = True
     binaries=[]
     for i in all_numbers:
@@ -572,7 +554,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         if(i[2] == "-"):
             two_comp = two_comp + 1
             if(i[1] == "int"):
-                print("i[3] ", i[3])
                 result.append(getIntTwosComplement(i[0],i[3]))
             else:
                 result.append(getBinTwosComplement(i[0],i[3]))
@@ -618,9 +599,9 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             steps = steps + str(binaries[0]).zfill(len(result[0][0])) + " ==> " + result[0][0] + "<br/>"
     else:
         if(all_numbers[0][2] == "-"):
-            steps = steps + "Operand 2 : Base 2( -" + str(all_numbers[0][0]) + " )<br/>"
+            steps = steps + "Operand 1 : Base 2( -" + str(all_numbers[0][0]) + " )<br/>"
         else:
-            steps = steps + "Operand 2 : Base 2( " + str(all_numbers[0][0]) + " )<br/>"
+            steps = steps + "Operand 1 : Base 2( " + str(all_numbers[0][0]) + " )<br/>"
     if(isDoubleNeg):
         steps = steps + "Double negation results in addition i.e. - -" + str(all_numbers[1][0]) + " ==> + " + str(all_numbers[1][0]) + "<br/>"
         if(all_numbers[1][2] == "-"):
@@ -641,7 +622,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         else:
             steps = steps + "Operand 2 : Base 2( " + str(all_numbers[1][0]) + " )<br/>"
     steps = steps + "Adding numbers: <br/>"
-    print("1 issigned " , isSignednumber )
     if(isSignednumber):
         steps = steps + "0" + str(op0) + "<br/>"
         steps = steps +  "0" + str(op1) + "<br/>"
@@ -708,7 +688,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         steps = steps +  str(op0) + "<br/>"
         steps = steps +  str(op1) + "<br/>"
         steps = steps +  str(ans) + "<br/>"
-        print("ans: " + ans)
         answer = 0 
         prev_steps = steps
         steps = "Converting the number to its decimal value: <br/> = "
@@ -716,7 +695,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         index= len(ans)
         index1= 0
         while (index > 1):
-            print("ans[index1] " , ans[index1])
             steps = steps + "( 2^" + str(index-1)  + " * " + ans[index1]+" ) + " 
             if(ans[index1]=="1"):
                 answer = answer + int(math.pow(2, (index-1)) )
@@ -725,7 +703,6 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
                 next_step = next_step + " 0 + "
             index1 = index1 + 1
             index = index - 1
-        print("ans[index1] " , ans[index1])
         steps = steps + "( 2^0"  + " * " + ans[len(ans)-1]+" ) <br/>" 
         if(ans[len(ans)-1] == "1"):
             answer = answer + 1
@@ -759,7 +736,6 @@ def binary_module(query):
     userbits = 0
     isuserbit = False
     tokenize = nltk.word_tokenize(query)
-    print(tokenize)
     for word in tokenize:
         bitindex = word.find("bit")
         bitindex1 = word.find("bits")
@@ -773,7 +749,6 @@ def binary_module(query):
     if(isuserbit == False):
         required_bits=0
     kwd = [x for x in tokenize if x in keyword_list] # get common keywords
-    print(kwd) 
           
     binar_numbers = []
     binar_signed =[]
