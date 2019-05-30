@@ -55,7 +55,7 @@ def submit():
         print(addDataToMongo(kwd, result[0], db))
 
     elif kwd == 'help':
-        guide = "Hi! My name is <b><i>Serina</i></b>. I will be your guide. I will assist you in academics. I has 2 modules:<br/>"\
+        guide = "Hi! My name is <b><i>Serina</i></b>. I will be your guide. I will assist you in academics. I have 2 modules:<br/>"\
                 "<b>University Module</b> and <b>Binary Module</b><br>"\
                 "University Module: This module can answer questions about"\
                 "program details, available courses etc <br/>"\
