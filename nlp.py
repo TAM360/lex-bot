@@ -757,14 +757,16 @@ def binary_module(query):
     all_numbers=[]
     # isolate decimal and binary number arguments. 
     for i in tokenize:
+        x = i
         isSigned = False
-
         if i[0]== '-':
             isSigned = True
-            i = i[1:]
+            if len(i) > 1:
+                i = i[1:]
         if i[0]== '+':
             if len(i)>1:
-               i = i[1:] 
+                if len(i) > 1:
+                    i = i[1:] 
         if re.match(r'[0-9]', i): 
             if check_binary_format(i) == "yes" and "base10" not in query and "base ten" not in query:
                 if(i.find("bit") < 0 ):
