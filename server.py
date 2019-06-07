@@ -55,22 +55,14 @@ def submit():
         print(addDataToMongo(kwd, result[0], db))
 
     elif kwd == 'help':
-        guide = "Hi! My name is <b><i>Serina</i></b>. I will be your guide. I will assist you in academics. I have 2 modules:<br/>"\
-                "<b>University Module</b> and <b>Binary Module</b><br>"\
-                "University Module: This module can answer questions about"\
-                "program details, available courses etc <br/>"\
-                "Binary Module: Submit any mathematical queries related with "\
-                "binary numbers and it will provide step by step solution. It "\
-                "can solve 1's compliment, 2's compliment, base converion "\
-                "(binary to decimal/decimal to binary), addition and subtraction."\
-                "It can also perform signed binary calculation where we are using the two’s compliment of the number to represent its negative number. User can also"\
-                "specify the number of bits in which the answer is required. If the user specified bits are less than minimum bits required for answer, the answer will be shown in minimum required bits."\
-                "Following are the sample questions. You can follow any of these formats to get the results<br/> "\
+        guide = "User Help Guide<br/>Hi! My name is <b><i>Serina</i></b>, and welcome to the Help Guide. The User Help Guide's aim is to give you assistance and walk-through you how to use the chabot.<br/>Question Input Guide<br/> You can submit any mathematical queries related with binary numbers, and the chatbot will provide the answer with a step by step exlpaiation.<br/>It can solve 1's compliment, 2's compliment, base converion (binary to decimal/decimal to binary), addition and subtraction.It can also perform signed binary calculation where we are using the two’s compliment of the number to represent its negative number. User can also specify the number of bits in which the answer is required. If the user specified bits are less than minimum bits required for answer, the answer will be shown in minimum required bits.<br/>"\
+                "It can solve 1's compliment, 2's compliment, base converion (binary to decimal/decimal to binary), addition and subtraction.It can also perform signed binary calculation where we are using the two’s compliment of the number to represent its negative number. User can also specify the number of bits in which the answer is required. If the user specified bits are less than minimum bits required for answer, the answer will be shown in minimum required bits.<br>"\
+                "The following are the sample questions. You can follow any of these formats to get the results:<br/>"\
                 "1. what's the one's compliment of 1010?<br/>"\
                 "2. what's the one's compliment of 1010 in base10?<br/>"\
                 "3. what's the two's compliment of -1010?<br/>"\
                 "4. what's the two's compliment of -1010 in base ten?<br/>"\
-                "5. what's the one's compliment of 12 in 13bit?<br/>"\
+                "5. what's the one's compliment of 12?<br/>"\
                 "6. what's the one's compliment of -12?<br/>"\
                 "7. how many bits are required to represent 37 in binary?<br/>"\
                 "8. how many bits are required to represent -37 in binary?<br/>"\
@@ -83,13 +75,53 @@ def submit():
                 "15. convert 10101 to decimal<br/>"\
                 "16. convert 24 from decimal to binary<br/>"\
                 "17. convert 110 from decimal to binary in base10 (or else it will give error for converting a binary number to binary again)<br/>"\
-                "18. how many bits are required to represent 111 in binary in base10?<br/><br/>"\
-                "Note:<br/>"\
-                "Spaces are required between operator and operands. If the space is not provided, it will be considered as a magnitude of the respective operand.<br/>"\
-                "For example ( 100 - 10 ), (100 + 10), (100 - -10), (-100 + -10)<br/>"\
-                "By Default, it takes numbers as binary if it only consists on 1’s and 0’s, e.g. 1, 11, 101.<br/>"\
-                "If you want them to be considered decimal, add keyword ‘base10’ or ‘base ten’ along, e.g. '24 - 10 in base10'<br/>"\
-                "Don’t use 1’s, 1s, 2’s and 2s as keywords for one’s and two’s complement."
+                "18. how many bits are required to represent 111 in binary in base10?<br/>"\
+                "19. how many bits are required to represent -111?<br/>"\
+                "20. How many bits in -16?<br/>"\
+                "21. How many bits in 32?<br/>"\
+                "Shortened forms of the questions will also be functional and provide correct results<br/>"\
+                "22. -29  binary<br/>"\
+                "23. 144  binary<br/>"\
+                "24. One's complement -6<br/>"\
+                "25. One's complement 7<br/>"\
+                "26. Two's complement -64<br/>"\
+                "27. Two's complement -8<br/>"\
+                "28. 3 - 3<br/>"\
+                "29. 3 - -3<br/>"\
+                "30. -3 + 3<br/>"\
+                "31. -3 + 4<br/>"\
+                "32. -4 + -4<br/>"\
+                "33. 4 + 4<br/>"\
+                "34. 11010 -  001<br/>"\
+                "35. 11010 + 101<br/>"\
+                "You can speccify how many bits<br/>"\
+                "34. what's the one's compliment of 12 in 13bit?<br/>"\
+                "35.what's the one's compliment of -14 in 13bit?<br/>"\
+                "36. what's the two's compliment of 9 in 16bit?<br/>"\
+                "37. what will be the answer for -2 + 5 in 10bit?<br/>"\
+                "38. -2 + 5 in 10bit? <br/>"\
+                "39. 7- -3  in 8bit <br/>"\
+                "<br/>Spacing requirements needed for addition and subraction<br/>"\
+                "Spaces are required between operator and operands. If the space is not provided for example 100-10 or 100+10, it will be considered as a magnitude of the respective operand. Thus a error message will appear.<br/>"\
+                "Here are examples of the spacing needed<br/>"\
+                "100 - 10<br/>"\
+                "100 + 10<br/>"\
+                "100 - -10<br/>"\
+                "-100 + -10<br/>"\
+                "Decimal Specification<br/>"\
+                "By Default, it takes numbers as binary if it only consists on 1’s and 0’s, e.g. 1, 11, 101.If you want them to be considered decimal, add keyword ‘base10’ or ‘base ten’ along, e.g. '24 - 10 in base10'<br/>"\
+                "Common error messages sources and their solutions<br/>"\
+                "Below are questions that will result in a error messsage: Sorry,  can you please repeat that? You can type 'help' for assistance. With the reasons for these errors, and solutions to them <br/>"\
+                "1. Typing: convert 101 to binary?<br/>"\
+                "Will give you an error message because...(insert explanation here).....<br/>"\
+                "Solution:<br/>In order to get the correct answer you must type<br/>"\
+                "Convert 101 base10 to binary? Or Convert 101 base ten to binary?<br/>"\
+                "2. Typing: how many bits in 100?<br/>"\
+                "Will give you an error message because 100 is a binary number by default and that question calculates the bits required to store a decimal number in binary.<br/>"\
+                "Solution:<br/>In order to get the correct answer you must type <br/>"\
+                "How many bits in 100 base10? Or How many bits in 100 base ten?<br/>"\
+                "3. Typing 1’s, 1s, 2’s and 2s as keywords for one’s and two’s complement. Will result in a error message, because the two sets of numbers in the question will confuse the chatbot as what operation will need to be done.<br/>"\
+                "Solution:<br/>Use the text (one's, ones or one) for one's complement and  (two's, twos or two) for two's complement.<br/>"
         result = '{"result" : "' + guide + '"}'
         resp = make_response(result)
 
@@ -126,7 +158,7 @@ def submit():
         resp = make_response(result)
         print(addDataToMongo(kwd, lexResponse, db))
     
-    print ('resp', resp)
+        print ('resp', resp)
     resp.status_code = 200
     resp.headers['Access-Control-Allow-Origin'] = '*'
     

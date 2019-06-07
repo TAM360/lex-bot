@@ -148,7 +148,7 @@ def signed_twos_complement(decimal_numbers, all_numbers):
     i = all_numbers[0]
     result = []
     answer = ""
-    steps = "For Negative number: First convert the number to its binary and than take its two's compliment. And the takes its two's complement again to get the required answer. <br/>"
+    steps = "*Here is a video showing how to get  two's complement of a negative decimal number. You can use this to understand how the calculatoin below was performed, and answer generated.<a href='https://youtu.be/yFiG8H4Ekoc'>https://youtu.be/yFiG8H4Ekoc</a><br/>For Negative number: First convert the number to its binary and than take its two's compliment. And the takes its two's complement again to get the required answer. <br/>"
     if len(all_numbers) == 1:
         if(all_numbers[0][1] == "int"):
             steps = steps + 'To convert decimal number into binary, divide the number by 2 repeatedly until<br />'
@@ -260,11 +260,10 @@ def decimal_to_binary(decimal_numbers):
                 num = num / 2
                 steps = steps + ', carry = ' + str(int(carry)) + '<br />'
                 count = count + 1
-            steps = steps + "<b/> <br/>"
+            steps = steps + "<b/><br/>" + str(decimal_numbers[0]) + " ==> " + str(bin(decimal_numbers[0]).replace("0b", ""))
         else: 
             steps = "<b> its a signed number.</b>"
         answer = str(bin(decimal_numbers[0]).replace("0b", ""))
-        answer.zfill(required_bits)
         return [answer, steps]
     
     else: 
@@ -298,10 +297,12 @@ def signed_decimal_to_binary(decimal_numbers, all_numbers):
             answer = answer.zfill(required_bits)
         else:
             answer = answer.zfill(anslen)
-        steps = steps + "Now take twos compliment of " + answer + "<br/>"
+        steps = steps + answer + "<br>(why the extra zero 0? In order, to get the correct bit representation for this number in binary. We hare to add an zero 0, thus extending the number)<br>"
+        steps = steps + "Now take twos compliment of " + answer + "<br>"
         result.append(getBinTwosComplement(answer,r_bit))
-        steps = steps + result[0][1]
-        steps = steps + answer + " ==> " + result[0][0]        
+        steps = steps + answer + " ==> " + result[0][0]  
+        steps = steps + "<br> *Here is a video showing how to convert negative decimal numbers into a two's complement binary number. You can use this to understand how these calculatoin were performed, and answer generated.<br><a href='https://youtu.be/yFiG8H4Ekoc'>https://youtu.be/yFiG8H4Ekoc</a>"
+        print(steps)
         answer = result[0][0]
 
 
@@ -354,13 +355,15 @@ def one_compliment(x, y = None):
 
 def twos_compliment(binary_numbers, decimal_numbers = None):
     if len(binary_numbers) == 1:
-        steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br />"
+        steps = "apply one's compliment to binary string first and then add 1 to LSB (Least Significant Bit)<br>"
         compliment = one_compliment(binary_numbers)
+        steps = steps + compliment[1]
         bitlen = compliment[0].__len__()
         answer = str(bin(int(compliment[0], base = 2) + 1).replace('0b', ''))
         answer = answer.zfill(bitlen)
         answer = answer.zfill(required_bits)
-        return [answer , steps + compliment[1]]
+        steps = steps + "<br>add 1 to it:<br>" + compliment[0] + " ==> " + answer
+        return [answer , steps]
     
     elif len(decimal_numbers) == 1:
         temp = [bin(decimal_numbers[0]).replace("0b", "")]
@@ -505,6 +508,7 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
     two_comp = 0
     isSignednumber = False
     result = []
+    explanation= "</br><br/>"
     if(op_type == "subtraction"):
         if(all_numbers.__len__() > 1):
             if(all_numbers[1][2]=="-"):
@@ -515,7 +519,14 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
                 op_type = "addition"
                 all_numbers[1][2] = "-"
     if(all_numbers[1][2]=="-" or all_numbers[0][2]=="-"):
+        explanation = explanation + "Here is a video showing how to subtract binary numbers.  You can use this to understand how the calculation below was performed, and answer generated.<br/><a href='https://www.youtube.com/watch?v=S9LJknZTyos'>https://www.youtube.com/watch?v=S9LJknZTyos</a><br/>"
         isSignednumber = True
+    else:
+        explanation = explanation + "*Here is a video showing how to add binary numbers. You can use this to understand how the calculatoin below was performed, and answer generated.<br/><a href='https://www.youtube.com/watch?v=jB_sRh5yoZk'>https://www.youtube.com/watch?v=jB_sRh5yoZk</a><br/>"\
+        "*If a column has all zeros (0), you drop down a zero (0)<br/>"\
+        "*If a column has a one (1) and a zero (0), you drop down a one (1)<br/>"\
+        "*If a column has  two ones, (1), you carry a one (1) and down a zero (0)<br/>"\
+        "*If a column has  three ones, (1), you carry a one (1) and down a one (1)"
     binaries=[]
     for i in all_numbers:
         if(i[2] == "-"):
@@ -633,8 +644,9 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
             steps = steps + "As there was only one negative operand, we are discarding the carry."
             ans = temp_ans.zfill(len(op0)+1)
         answer = 0 
+        steps = steps + explanation
         prev_steps = steps
-        steps = "<br/>Converting the number to its decimal value: <br/>"
+        steps = "<br/>Lastly convert the answer to its decimal value using,  take sum of (2*i)^x where i = bit value and x = bit position: <br/>"
         next_step = "= "
         if(ans[0]=='1'):
             if (two_comp == 1):
@@ -689,8 +701,9 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         steps = steps +  str(op1) + "<br/>"
         steps = steps +  str(ans) + "<br/>"
         answer = 0 
+        steps = steps + explanation
         prev_steps = steps
-        steps = "Converting the number to its decimal value: <br/> = "
+        steps = "Lastly convert the answer to its decimal value using,  take sum of (2*i)^x where i = bit value and x = bit position:<br/> = "
         next_step = "= "
         index= len(ans)
         index1= 0
@@ -710,9 +723,9 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
         else:
             next_step = next_step + " 0<br/>"  
         next_step = next_step + " = " + str(answer) + "<br/>" 
-        steps = steps + next_step
-        
-    
+        steps = steps + next_step    
+
+
     if(isDecimal):
         #dec_value = getDecimal(ans,isSignednumber)
         prev_steps = prev_steps + steps 
@@ -721,8 +734,8 @@ def binary_add_sub(op_type,all_numbers,binary_numbers,decimal_numbers = None):
     else:
         steps = prev_steps
         final_ans = ans
-    
-    
+
+
     return [final_ans, steps]
 
 def binary_module(query):
